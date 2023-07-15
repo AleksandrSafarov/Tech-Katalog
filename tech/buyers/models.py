@@ -1,3 +1,13 @@
 from django.db import models
+from django.contrib.auth.models import User
+from main.models import Product
 
-# Create your models here.
+class ProductInCart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product)
+    count = models.PositiveIntegerField(default=1)
+    is_active = models.BooleanField(default=True)
+
+class SavedAddress(models.Model):
+    info = models.CharField(max_length=150)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

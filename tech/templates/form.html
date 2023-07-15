@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block extraheader %}
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+	<div class="form-title">
+		<label class="fs-3">{{ title }}</label>
+	</div>
+	<form method="POST" action="" enctype="multipart/form-data">
+		<div class="form-group">
+			{% csrf_token %}
+
+			{% for field in form %}
+				<div class="row">{% render_field field class='form-control' %}</div>
+				<div class="row">{{ field.help_text }}</div>
+				<div class="row">{{ field.errors }}</div>
+			{% endfor %}
+
+			<div>{{ form.non_field_errors }}</div>
+
+			<div class="row button">
+				<input type="submit" class="btn btn-primary" value="{{ button_text }}">
+			</div>
+		</div>
+	</form>
+</div>
+{% endblock %}
