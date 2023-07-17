@@ -3,7 +3,7 @@ from django.contrib.auth.forms import *
 from django.contrib.auth.models import User
 
 
-class BuyerSignUpForm(UserCreationForm):
+class SignUpForm(UserCreationForm):
     username = forms.CharField(
         label="", 
         widget=forms.TextInput(attrs={'placeholder': "Логин"})
@@ -25,7 +25,7 @@ class BuyerSignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'email', 'password1', 'password2')
 
-class BuyerLoginForm(AuthenticationForm):
+class LoginForm(AuthenticationForm):
     username = forms.CharField(
         label="", 
         widget=forms.TextInput(attrs={'placeholder': "Логин"})
@@ -35,7 +35,7 @@ class BuyerLoginForm(AuthenticationForm):
         widget=forms.PasswordInput(attrs={'placeholder': "Пароль", "class": "form-control"})
         )
 
-class BuyerChangePasswordForm(PasswordChangeForm):
+class ChangePasswordForm(PasswordChangeForm):
     old_password = forms.CharField(
         label="", 
         widget=forms.PasswordInput(attrs={'placeholder': "Старый пароль"})
@@ -53,7 +53,7 @@ class BuyerChangePasswordForm(PasswordChangeForm):
         model = User
         fields = ('old_password', 'new_password1', 'new_password2')
 
-class BuyerChangeUserDataForm(UserChangeForm):
+class ChangeUserDataForm(UserChangeForm):
     username = forms.CharField(
         label="", 
         widget=forms.TextInput(attrs={'placeholder': "Логин"})

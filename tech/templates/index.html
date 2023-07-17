@@ -7,4 +7,10 @@
 {% endblock %}
 
 {% block content %}
+
+{% if user.is_authenticated %}
+<p>{{ user.username }}</p>
+{% else %}
+<p>12345</p>
+{% endif %}
 {% endblock %}

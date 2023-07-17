@@ -7,4 +7,5 @@ class Seller(models.Model):
     full_name = models.CharField(max_length=100)
     address = models.CharField(max_length=150)
     description = models.TextField()
+    is_sertificated = models.BooleanField(default=False)
     image = models.ImageField(upload_to='images/')
