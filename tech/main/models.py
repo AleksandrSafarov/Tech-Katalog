@@ -14,14 +14,14 @@ class Product(models.Model):
     price = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(100_000_000_000)])
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    main_image = models.ImageField(upload_to='images/')
+    main_image = models.ImageField(upload_to='images/products/')
 
 class ProductImage(models.Model):
-    image = models.ImageField(upload_to='images/')
+    image = models.ImageField(upload_to='images/products/')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
 class Discount(models.Model):
-    value = models.PositiveIntegerField(default=10, validators=[MinValueValidator(1), MaxValueValidator(99)])
+    value = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(99)])
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
 class ProductRating(models.Model):

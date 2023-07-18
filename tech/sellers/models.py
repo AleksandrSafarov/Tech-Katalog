@@ -8,4 +8,4 @@ class Seller(models.Model):
     address = models.CharField(max_length=150)
     description = models.TextField()
     is_sertificated = models.BooleanField(default=False)
-    image = models.ImageField(upload_to='images/')
+    image = models.ImageField(upload_to='images/sellers/')

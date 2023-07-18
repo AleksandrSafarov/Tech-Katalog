@@ -1,5 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+
+import datetime
+
 from main.models import Product
 
 class ProductInCart(models.Model):
@@ -14,5 +18,6 @@ class SavedAddress(models.Model):
 
 class Comment(models.Model):
     text = models.TextField()
+    date = models.DateTimeField(default=datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(hours=3))
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
