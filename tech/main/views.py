@@ -8,17 +8,23 @@ from django.urls.base import reverse_lazy
 from django.views.generic import *
 
 from .forms import *
+from .models import *
 
 class Index(TemplateView):
-    template_name = 'index.html'
+    template_name = 'main/index.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
+
         context = super().get_context_data(**kwargs)
+        categories = list(Category.objects.all())
+        print(categories)
+        
+        context["categories"] = categories
         return context
 
 class SignUp(CreateView):
     form_class = SignUpForm
-    template_name = 'form.html'
+    template_name = 'main/form.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -33,7 +39,7 @@ class SignUp(CreateView):
 
 class Login(LoginView):
     form_class = LoginForm
-    template_name = 'form.html'
+    template_name = 'main/form.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -48,7 +54,7 @@ class Login(LoginView):
 
 class ChangeUserData(LoginRequiredMixin, UpdateView):
     form_class = ChangeUserDataForm
-    template_name = 'form.html'
+    template_name = 'main/form.html'
     success_url = reverse_lazy('index')
     login_url = reverse_lazy('login')
 
@@ -63,7 +69,7 @@ class ChangeUserData(LoginRequiredMixin, UpdateView):
 
 class ChangePass(LoginRequiredMixin, PasswordChangeView):
     form_class = ChangePasswordForm
-    template_name = 'form.html'
+    template_name = 'main/form.html'
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('index')
 

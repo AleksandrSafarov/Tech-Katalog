@@ -1,11 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils import timezone
+
+import datetime
 
 from sellers.models import Seller
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
+    plural_name = models.CharField(max_length=50, default="")
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
@@ -23,6 +27,7 @@ class ProductImage(models.Model):
 class Discount(models.Model):
     value = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(99)])
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    finish_date = models.DateTimeField(default=datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(hours=3))
 
 class ProductRating(models.Model):
     score = models.IntegerField(default=1)
@@ -33,3 +38,7 @@ class SellerRating(models.Model):
     score = models.IntegerField(default=1)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
+
+class Popularity(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    finish_date = models.DateTimeField(default=datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(hours=3))
