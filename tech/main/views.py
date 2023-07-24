@@ -17,10 +17,20 @@ class Index(TemplateView):
 
         context = super().get_context_data(**kwargs)
         categories = list(Category.objects.all())
-        print(categories)
         
         context["categories"] = categories
         return context
+    
+
+def categoryPage(request, category_id):
+    category = Category.objects.get(id=category_id)
+    products = list(Product.objects.filter(category=category))
+
+    context={
+        'products':products,
+    }
+
+    return render(request, 'main/categoryPage.html', context=context)
 
 class SignUp(CreateView):
     form_class = SignUpForm

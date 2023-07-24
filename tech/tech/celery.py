@@ -1,21 +1,22 @@
-from __future__ import absolute_import
 import os
 from celery import Celery
+from celery.schedules import crontab
 
-# этот код скопирован с manage.py
-# он установит модуль настроек по умолчанию Django для приложения 'celery'.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tech.settings')
 
-# здесь вы меняете имя
-app = Celery("tech")
 
-# Для получения настроек Django, связываем префикс "CELERY" с настройкой celery
-app.config_from_object('django.conf:settings', namespace='CELERY')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'tech.settings')
 
-# загрузка tasks.py в приложение django
+app = Celery('tech')
+app.config_from_object('django.conf:settings', namespace="CELERY")
 app.autodiscover_tasks()
 
 
-@app.task
-def add(x, y):
-    return x / y
+
+# заносим таски в очередь
+app.conf.beat_schedule = {
+    'every': { 
+        'task': 'main.tasks.repeat_order_make',
+        'schedule': crontab(),# по умолчанию выполняет каждую минуту, очень гибко 
+    },                                                              # настраивается
+
+}

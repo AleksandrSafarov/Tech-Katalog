@@ -9,13 +9,9 @@
 {% block content %}
 
 <div class="container">
-    <div class="wrapper">
-        {% for category in categories %}
-        <a href="{% url 'category' category.id %}">
-            <div class="box">{{ category.plural_name }}</div>
-        </a>
+        {% for prod in products %}
+            <p class="">{{ prod.name }}</p>
         {% endfor %}
-    </div>
 </div>
 
 {% endblock %}
