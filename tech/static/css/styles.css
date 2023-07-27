@@ -1,4 +1,4 @@
-.base-header{
+div.base-header{
     background-color: rgb(220, 0, 0);
     position: fixed;
     width: 100%;
@@ -6,12 +6,22 @@
     margin-top: -7%;
 }
 
-.container{
+div.container{
     margin-top: 7%;
-    margin-left: 3%;
+    margin-left: 6%;
 }
 
-.wrapper {
+div.form-container{
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 7%;
+}
+
+div.row{
+    margin-top: 0.2%;
+}
+
+div.wrapper {
     display: grid;
     grid-template-columns: 30% 30% 30%;
     margin-left: 7%;
@@ -20,13 +30,14 @@
     color: #444;
   }
   
-.box {
+div.box {
     background-color: #444;
     color: #fff;
     border-radius: 5px;
-    padding: 20px;
+    padding: 15%;
     font-size: 150%;
     text-align: center;
+    height: 100%;
 }
 
 hr.dropdown-line{

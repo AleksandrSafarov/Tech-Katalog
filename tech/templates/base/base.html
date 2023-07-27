@@ -43,7 +43,11 @@
                                 <li><a class="dropdown-item" href="#">Избранное</a></li>
                                 <li><a class="dropdown-item" href="#">История заказов</a></li>
                                 <hr class="dropdown-line">
-                                <li><a class="dropdown-item" href="#">Выйти</a></li>
+                                <li><a href="{% url 'createSeller' %}" class="dropdown-item">Продавать на Tech-Katalog</a></li>
+                                <hr class="dropdown-line">
+                                <li><a class="dropdown-item" href="{% url 'editData' %}">Изменить данные</a></li>
+                                <li><a class="dropdown-item" href="{% url 'changePassword' %}">Изменить пароль</a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
                             </ul>
                         </div>
                     </li>

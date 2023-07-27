@@ -17,7 +17,7 @@ class ProductInCart(models.Model):
         return self.product + ': ' + self.user + ': ' + str(self.count)
 
     class Meta:
-        verbose_name_plural = "Products in cart"
+        verbose_name_plural = "Product in cart"
 
 class SavedAddress(models.Model):
     info = models.CharField(max_length=150)
@@ -28,6 +28,17 @@ class SavedAddress(models.Model):
 
     class Meta:
         verbose_name_plural = "Saved addresses"
+
+class ProductInOrder(models.Model):
+    productInCart = models.ForeignKey(ProductInCart, on_delete=models.CASCADE)
+    address = models.ForeignKey(SavedAddress, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.product.product.name + self.product.user
+
+    class Meta:
+        verbose_name_plural = "Product in order"
 
 class Comment(models.Model):
     text = models.TextField()

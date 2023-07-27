@@ -10,6 +10,10 @@ class SavedAddressAdmin(admin.ModelAdmin):
     list_display = ('id', 'info', 'user')
     list_display_links = ('id', 'info', 'user')
 
+class ProductInOrderAdmin(admin.ModelAdmin):
+    list_display = ('id', 'productInCart', 'address', 'is_active')
+    list_display_links = ('id', 'productInCart')
+
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('id', 'product', 'user', 'date')
     list_display_links = ('id', 'product', 'user')
@@ -20,5 +24,6 @@ class FavouritesAdmin(admin.ModelAdmin):
 
 admin.site.register(ProductInCart, ProductInCartAdmin)
 admin.site.register(SavedAddress, SavedAddressAdmin)
+admin.site.register(ProductInOrder, ProductInOrderAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Favourites, FavouritesAdmin)

@@ -9,11 +9,10 @@
 {% block content %}
 
 <div class="container">
-        {% for product in products %}
+        <p>{{ product.name }}</p>
         <p>
-            <a href="{% url 'product' product.id %}" class="">{{ product.name }}</a>
+            <a href="{% url 'seller' product.seller.id %}">{{ product.seller.name }}</a>
         </p>
-        {% endfor %}
 </div>
 
 {% endblock %}

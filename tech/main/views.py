@@ -32,6 +32,25 @@ def categoryPage(request, category_id):
 
     return render(request, 'main/categoryPage.html', context=context)
 
+def allProductsPage(request):
+    products = list(Product.objects.all())
+
+    context={
+        'products':products,
+    }
+
+    return render(request, 'main/allProductsPage.html', context=context)
+
+def productPage(request, product_id):
+    product = Product.objects.get(id=product_id)
+
+    context={
+        'product':product,
+    }
+
+    return render(request, 'main/productPage.html', context=context)
+
+
 class SignUp(CreateView):
     form_class = SignUpForm
     template_name = 'main/form.html'
