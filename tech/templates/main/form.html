@@ -26,6 +26,14 @@
 			<div class="row button">
 				<input type="submit" class="btn btn-primary" value="{{ button_text }}">
 			</div>
+
+			{% if "login" in request.path %}
+				<div class="signup-link">Нет аккаунта? <a href="{% url 'signup' %}">Создайте!</a></div>
+			{% endif %}
+			{% if "signup" in request.path %}
+				<div class="signup-link">Есть аккаунт? <a href="{% url 'login' %}">Войти?</a></div>
+			{% endif %}
+
 		</div>
 	</form>
 </div>

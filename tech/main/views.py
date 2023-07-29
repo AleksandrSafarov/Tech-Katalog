@@ -14,7 +14,7 @@ class Index(TemplateView):
     template_name = 'main/index.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
-
+        
         context = super().get_context_data(**kwargs)
         categories = list(Category.objects.all())
         

@@ -15,10 +15,15 @@ div.form-container{
     margin-left: 30%;
     margin-right: 30%;
     margin-top: 7%;
+    text-align: center;
 }
 
 div.row{
     margin-top: 0.2%;
+}
+
+div.signup-link{
+    margin-top: 1%;
 }
 
 div.wrapper {

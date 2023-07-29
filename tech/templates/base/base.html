@@ -1,4 +1,5 @@
 {% load static %}
+{% load sellersTag %}
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -43,7 +44,12 @@
                                 <li><a class="dropdown-item" href="#">Избранное</a></li>
                                 <li><a class="dropdown-item" href="#">История заказов</a></li>
                                 <hr class="dropdown-line">
-                                <li><a href="{% url 'createSeller' %}" class="dropdown-item">Продавать на Tech-Katalog</a></li>
+                                {% checkIsSeller user as isSeller %}
+                                {% if isSeller %}
+                                    <li><a class="dropdown-item" href="{% url 'sellerArea' %}">Профиль продавца</a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item" href="{% url 'createSeller' %}">Продавать на Tech-Katalog</a></li>
+                                {% endif %}
                                 <hr class="dropdown-line">
                                 <li><a class="dropdown-item" href="{% url 'editData' %}">Изменить данные</a></li>
                                 <li><a class="dropdown-item" href="{% url 'changePassword' %}">Изменить пароль</a></li>
