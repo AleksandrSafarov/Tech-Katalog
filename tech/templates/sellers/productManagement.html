@@ -1,0 +1,43 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Tech-Katalog{% endblock %}
+
+{% block extraheader %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+        <table class="table">
+                <thead class="thead-light">
+                        <tr>
+                          <th scope="col">Название</th>
+                          <th scope="col">Категория</th>
+                          <th scope="col">Кол-во</th>
+                          <th scope="col">Цена</th>
+                          <th scope="col"></th>
+                        </tr>
+                </thead>
+                <tbody>
+                {% for product in products %}
+                <tr>
+                        <th scope="row">{{ product.name }}</th>
+                        <td>{{ product.category }}</td>
+                        <td>{{ product.get_stock }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>
+                                <a href="{% url 'newStock' product.id %}" class="text-decoration-none">
+                                        <button class="btn btn-primary">Изменить количество</button>
+                                </a>
+                                <a href="{% url 'newPrice' product.id %}" class="text-decoration-none">
+                                        <button class="btn btn-secondary" style="margin-left: 2%;">Изменить цену</button>
+                                </a>
+                        </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+        </table>
+</div>
+
+{% endblock %}

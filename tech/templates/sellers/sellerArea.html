@@ -9,8 +9,27 @@
 {% block content %}
 
 <div class="container">
-        <p>{{ seller.name }}</p>
-        <p>{{ seller.full_name }}</p>
+        <div class="seller-info-and-image">
+                <div class="seller-info-container">
+                        <h1>{{ seller.name }}</h1>
+                        <h4>Юридическая информация</h4>
+                        <p>{{ seller.full_name }}</p>
+                        <p><b>Адрес:</b> {{ seller.address }}</p>
+                        {% if seller.description %}
+                        <h4>Описание</h4>
+                        <p>
+                                {% autoescape on %}
+	                        {{seller.description|linebreaks|truncatewords:50}}
+	                        {% endautoescape %}
+                        </p>
+                        {% endif %}
+                </div>
+                
+                <div class="seller-image-container">
+                        <img class="seller-image" src="{{ seller.image.url }}">
+                        <a href="{% url 'productManagement' %}" class="text-decoration-none"><button class="btn btn-light">Управление товарами</button></a>
+                </div>
+        </div>
 </div>
 
 {% endblock %}

@@ -21,3 +21,6 @@ class CreateSellerForm(forms.ModelForm):
     class Meta:
         model = Seller
         fields = ('name', 'full_name', 'address', 'description', 'image')
+
+class ChangeStockForm(forms.Form):
+    newStock = forms.IntegerField()

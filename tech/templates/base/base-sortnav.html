@@ -1,4 +1,5 @@
 {% load static %}
+{% load sellersTag %}
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -9,8 +10,9 @@
 
     <link type="text/css" href="{% static 'css/styles.css' %}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="{% static 'js/script.js' %}" type="text/javascript"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-2.1.1.js" integrity="sha256-FA/0OOqu3gRvHOuidXnRbcmAWVcJORhz+pv3TX2+U6w=" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     {% block extraheader %}{% endblock %}
 </head>
@@ -26,21 +28,34 @@
                     
                     <li class="navitem">
                         <a class="nav-link text-light text-decoration-underline fs-4" href="{% url 'index' %}">
-                            Главная
+                            Тут будет поиск
                        </a>
                     </li>
                     {% if request.user.is_authenticated %}
                     <li class="nav-item">
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                              Кнопка выпадающего списка
+                        <div class="dropdown" style="margin-top: 4%;">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                              <span class="fs-5">{{ user.username }}</span>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                              <li><a class="dropdown-item" href="#">Действие</a></li>
-                              <li><a class="dropdown-item" href="#">Другое действие</a></li>
-                              <li><a class="dropdown-item" href="#">Что-то еще здесь</a></li>
+                                <li><span class="dropdown-item-text">Почта: {{ user.email }}</span></li>
+                                <hr class="dropdown-line">
+                                <li><a class="dropdown-item" href="#">Корзина</a></li>
+                                <li><a class="dropdown-item" href="#">Избранное</a></li>
+                                <li><a class="dropdown-item" href="#">История заказов</a></li>
+                                <hr class="dropdown-line">
+                                {% checkIsSeller user as isSeller %}
+                                {% if isSeller %}
+                                    <li><a class="dropdown-item" href="{% url 'sellerArea' %}">Профиль продавца</a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item" href="{% url 'createSeller' %}">Продавать на Tech-Katalog</a></li>
+                                {% endif %}
+                                <hr class="dropdown-line">
+                                <li><a class="dropdown-item" href="{% url 'editData' %}">Изменить данные</a></li>
+                                <li><a class="dropdown-item" href="{% url 'changePassword' %}">Изменить пароль</a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
                             </ul>
-                          </div>
+                        </div>
                     </li>
         
                     {% else %}
@@ -54,6 +69,7 @@
             <hr>
         </header>
     </div>
+    
     
 
 

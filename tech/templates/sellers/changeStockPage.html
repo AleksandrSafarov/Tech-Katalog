@@ -1,0 +1,19 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Tech-Katalog{% endblock %}
+
+{% block extraheader %}
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container">
+    <form action="{% url 'changeStock' product.id %}">
+        <input type="number" min="0" name="newStock" placeholder="{{ product.stock }}">
+        <input type="submit" value="Изменить количество" class="btn btn-primary">
+    </form>
+</div>
+
+{% endblock %}

@@ -28,6 +28,11 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def get_stock(self):
+        if self.stock:
+            return self.stock
+        return 'Нет в наличии'
 
 class ProductImage(models.Model):
     image = models.ImageField(upload_to='images/products/')

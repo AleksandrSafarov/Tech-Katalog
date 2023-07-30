@@ -49,3 +49,29 @@ hr.dropdown-line{
     margin-bottom: 0;
     margin-top:0;
 }
+
+img.seller-image {
+    display: block;
+    max-width:45%;
+    max-height:18%;
+    width: auto;
+    height: auto;
+    border-radius: 10px;
+  }
+
+div.seller-info-and-image{
+    padding-top: 2%;
+    width:100%;
+    margin-left: 15%;
+    font-size:large;
+}
+
+div.seller-info-container{
+    float:left;
+    width: 50%;
+}
+
+div.seller-image-container{
+    float: right;
+    width: 50%;
+}

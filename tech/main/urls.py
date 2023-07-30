@@ -12,5 +12,4 @@ urlpatterns = [
     path('login/', Login.as_view(), name='login'),
     path('edituserdata/', ChangeUserData.as_view(), name='editData'),
     path('changepassword/', ChangePass.as_view(), name='changePassword'),
-    #path('personalArea/', PersonalArea.as_view(), name='personalArea')
 ]
