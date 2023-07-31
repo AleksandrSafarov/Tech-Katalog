@@ -9,13 +9,15 @@
 {% block content %}
 
 <div class="container">
+        
+        <a href="{% url 'createProduct' %}" class="text-decoration-none"><button class="btn btn-dark">Добавить товар</button></a>
         <table class="table">
                 <thead class="thead-light">
                         <tr>
                           <th scope="col">Название</th>
                           <th scope="col">Категория</th>
                           <th scope="col">Кол-во</th>
-                          <th scope="col">Цена</th>
+                          <th scope="col">Цена (₽)</th>
                           <th scope="col"></th>
                         </tr>
                 </thead>

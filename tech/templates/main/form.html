@@ -16,9 +16,12 @@
 			{% csrf_token %}
 
 			{% for field in form %}
+			<div class="row">
+			<label for="{{ field.id_for_label }}" style="text-align: left;">{{ field.label }}</label>
 				<div class="row">{% render_field field class='form-control' %}</div>
 				<div class="row">{{ field.help_text }}</div>
 				<div class="row">{{ field.errors }}</div>
+			</div>
 			{% endfor %}
 
 			<div>{{ form.non_field_errors }}</div>

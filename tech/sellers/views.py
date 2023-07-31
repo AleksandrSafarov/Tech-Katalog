@@ -107,4 +107,20 @@ class CreateSeller(IsNotSellerMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.save()
-        return redirect('index')
+        return redirect('sellerArea')
+
+class CreateProduct(IsSellerMixin, CreateView):
+    form_class = CreateProductForm
+    template_name = 'main/form.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'Добавить товар'
+        context["button_text"] = "Добавить"
+        return context
+
+    def form_valid(self, form):
+        seller = Seller.objects.get(user=self.request.user)
+        form.instance.seller = seller
+        form.save()
+        return redirect('productManagement')
