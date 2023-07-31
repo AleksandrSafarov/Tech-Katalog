@@ -46,7 +46,8 @@ class CreateProductForm(forms.ModelForm):
     stock = forms.IntegerField(
         label="",
         widget=forms.TextInput(attrs={'placeholder': "Количество",
-                                      'min':'1'})
+                                      'min':'1',
+                                      'max':'100000000'})
     )
     description = forms.CharField(
         label="",

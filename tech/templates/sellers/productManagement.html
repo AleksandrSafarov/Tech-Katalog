@@ -24,7 +24,13 @@
                 <tbody>
                 {% for product in products %}
                 <tr>
-                        <th scope="row">{{ product.name }}</th>
+                        <th scope="row">
+                                <a href="{% url 'product' product.id %}" class="link-dark">
+                                        {% autoescape on %}
+                                        {{product.name|linebreaks|truncatechars:50}}
+                                        {% endautoescape %}
+                                </a>
+                        </th>
                         <td>{{ product.category }}</td>
                         <td>{{ product.get_stock }}</td>
                         <td>{{ product.price }}</td>

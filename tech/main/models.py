@@ -19,7 +19,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
-    stock = models.PositiveIntegerField(default=1)
+    stock = models.PositiveIntegerField(default=1, validators=[MinValueValidator(0), MaxValueValidator(100_000_000)])
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
     price = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(100_000_000_000)])
     description = models.TextField()

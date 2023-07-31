@@ -11,7 +11,7 @@
 
 <div class="container">
     <form action="{% url 'changeStock' product.id %}">
-        <input type="number" min="0" name="newStock" placeholder="{{ product.stock }}">
+        <input type="number" min="0" max="100000000" name="newStock" placeholder="{{ product.stock }}">
         <input type="submit" value="Изменить количество" class="btn btn-primary">
     </form>
 </div>
