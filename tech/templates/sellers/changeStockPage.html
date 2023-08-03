@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-{% block title %}Tech-Katalog{% endblock %}
+{% block title %}Изменить количество{% endblock %}
 
 {% block extraheader %}
 {% endblock %}
@@ -9,10 +9,24 @@
 {% block content %}
 
 
-<div class="container">
+<div class="form-container">
+    <div class="form-title">
+		<label class="fs-3">Изменить количество</label>
+	</div>
     <form action="{% url 'changeStock' product.id %}">
-        <input type="number" min="0" max="100000000" name="newStock" placeholder="{{ product.stock }}">
-        <input type="submit" value="Изменить количество" class="btn btn-primary">
+        <div class="form-group">
+            <div class="row">
+                <div class="row">
+        <input type="number" class="form-control" min="1" max="100000000" name="newStock" placeholder="{{ product.stock }}">
+        
+    </div>
+    </div>
+    <div class="row">
+        <div class="row">
+        <input type="submit" value="Изменить" class="btn btn-primary">
+    </div>
+    </div>
+    </div>
     </form>
 </div>
 

@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-{% block title %}Tech-Katalog{% endblock %}
+{% block title %}Изменить цену{% endblock %}
 
 {% block extraheader %}
 {% endblock %}
@@ -9,10 +9,24 @@
 {% block content %}
 
 
-<div class="container">
+<div class="form-container">
+    <div class="form-title">
+		<label class="fs-3">Изменить цену</label>
+	</div>
     <form action="{% url 'changePrice' product.id %}">
-        <input type="number" min="1" max="100000000000" name="newPrice" placeholder="{{ product.price }} ₽">
-        <input type="submit" value="Изменить цену" class="btn btn-primary">
+        <div class="form-group">
+            <div class="row">
+                <div class="row">
+        <input type="number" class="form-control" min="1" max="100000000000" name="newPrice" placeholder="{{ product.price }} ₽">
+        
+    </div>
+    </div>
+    <div class="row">
+        <div class="row">
+        <input type="submit" value="Изменить" class="btn btn-primary">
+    </div>
+    </div>
+    </div>
     </form>
 </div>
 

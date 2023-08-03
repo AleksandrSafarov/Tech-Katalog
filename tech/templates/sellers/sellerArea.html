@@ -19,7 +19,7 @@
                         <h4>Описание</h4>
                         <p>
                                 {% autoescape on %}
-	                        {{seller.description|linebreaks|truncatewords:50}}
+	                        {{seller.description|linebreaks}}
 	                        {% endautoescape %}
                         </p>
                         {% endif %}

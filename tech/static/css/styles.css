@@ -22,6 +22,7 @@ div.row{
     margin-top: 0.2%;
 }
 
+
 div.signup-link{
     margin-top: 1%;
 }
@@ -69,6 +70,8 @@ div.seller-info-and-image{
 div.seller-info-container{
     float:left;
     width: 50%;
+    word-wrap: break-word;
+    padding-right: 5%;
 }
 
 div.seller-image-container{

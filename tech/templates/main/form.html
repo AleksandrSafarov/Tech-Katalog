@@ -26,8 +26,10 @@
 
 			<div>{{ form.non_field_errors }}</div>
 
-			<div class="row button">
+			<div class="row">
+				<div class="row">
 				<input type="submit" class="btn btn-primary" value="{{ button_text }}">
+			</div>
 			</div>
 
 			{% if "login" in request.path %}
