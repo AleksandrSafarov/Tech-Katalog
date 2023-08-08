@@ -12,4 +12,5 @@ urlpatterns = [
     path('newstock/changeStock/<int:product_id>', changeStock, name='changeStock'),
     path('newprice/<int:product_id>', changePricePage, name='newPrice'),
     path('newprice/changePrice/<int:product_id>', changePrice, name='changePrice'),
+    path('addproductimage/<int:product_id>', addProductImage, name='addProductImage'),
 ]

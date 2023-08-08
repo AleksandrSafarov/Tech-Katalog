@@ -43,9 +43,12 @@ def allProductsPage(request):
 
 def productPage(request, product_id):
     product = Product.objects.get(id=product_id)
-
+    images = list(ProductImage.objects.filter(product=product))
+    seller = Seller.objects.get(id=product.seller.id)
     context={
-        'product':product,
+        'product': product,
+        'images': images,
+        'seller': seller,
     }
 
     return render(request, 'main/productPage.html', context=context)

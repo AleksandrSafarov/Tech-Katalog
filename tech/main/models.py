@@ -50,7 +50,6 @@ class Discount(models.Model):
         return self.product.name + '; ' + str(self.value)
 
 class ProductRating(models.Model):
-    score = models.IntegerField(default=1)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
@@ -60,16 +59,25 @@ class ProductRating(models.Model):
     class Meta:
         verbose_name_plural = "Product rating"
 
+class ProductRating(models.Model):
+    score = models.IntegerField(default=1)
+    text = models.TextField(null=True)
+    date = models.DateTimeField(default=datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(hours=3))
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.product + ': ' + self.user + ': ' + self.date
+
 class SellerRating(models.Model):
     score = models.IntegerField(default=1)
+    text = models.TextField(null=True)
+    date = models.DateTimeField(default=datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(hours=3))
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.seller.name + '; ' + str(self.score)
-
-    class Meta:
-        verbose_name_plural = "Seller rating"
+        return self.product + ': ' + self.user + ': ' + self.date
 
 class Popularity(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

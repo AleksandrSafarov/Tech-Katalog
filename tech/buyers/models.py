@@ -40,15 +40,6 @@ class ProductInOrder(models.Model):
     class Meta:
         verbose_name_plural = "Product in order"
 
-class Comment(models.Model):
-    text = models.TextField()
-    date = models.DateTimeField(default=datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(hours=3))
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.product + ': ' + self.user + ': ' + self.date
-
 class Favourites(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

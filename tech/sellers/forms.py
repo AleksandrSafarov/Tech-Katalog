@@ -2,23 +2,23 @@ from django import forms
 from django.contrib.auth.forms import *
 
 from .models import *
-from main.models import Product, Category
+from main.models import Product, Category, ProductImage
 
 class CreateSellerForm(forms.ModelForm):
     name = forms.CharField(
-        label="",
+        label='',
         widget=forms.TextInput(attrs={'placeholder': "Короткое название (Пример: \"CompanyName\")"})
         )
     full_name = forms.CharField(
-        label="",
+        label='',
         widget=forms.TextInput(attrs={'placeholder': "Полное название (Пример: ООО \"CompanyName\")"})
     )
     address = forms.CharField(
-        label="",
+        label='',
         widget=forms.TextInput(attrs={'placeholder': "Адрес"})
     )
     description = forms.CharField(
-        label="",
+        label='',
         widget=forms.Textarea(attrs={'placeholder': "Описание (необязательно)"})
     )
     image = forms.ImageField(
@@ -30,7 +30,7 @@ class CreateSellerForm(forms.ModelForm):
 
 class CreateProductForm(forms.ModelForm):
     name = forms.CharField(
-        label="",
+        label='',
         widget=forms.TextInput(attrs={'placeholder': "Название"})
         )
     category = forms.ModelChoiceField(
@@ -38,19 +38,19 @@ class CreateProductForm(forms.ModelForm):
         queryset=Category.objects.all()
     )
     price = forms.IntegerField(
-        label="",
+        label='',
         widget=forms.TextInput(attrs={'placeholder': "Цена (₽)", 
                                       'min':'1', 
                                       'max':'100000000000'})
     )
     stock = forms.IntegerField(
-        label="",
+        label='',
         widget=forms.TextInput(attrs={'placeholder': "Количество",
                                       'min':'1',
                                       'max':'100000000'})
     )
     description = forms.CharField(
-        label="",
+        label='',
         widget=forms.Textarea(attrs={'placeholder': "Описание товара"})
     )
     main_image = forms.ImageField(
@@ -59,3 +59,12 @@ class CreateProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ('name', 'category', 'price', 'stock', 'description', 'main_image')
+
+class ProductImageForm(forms.ModelForm):
+   image = forms.ImageField(
+       label=''
+   )
+
+   class Meta:
+      model = ProductImage
+      fields = ('image',)

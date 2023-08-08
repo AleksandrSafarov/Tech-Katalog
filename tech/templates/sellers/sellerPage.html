@@ -20,14 +20,16 @@
                         <h4>Описание</h4>
                         <p>
                                 {% autoescape on %}
-	                        {{seller.description|linebreaks|truncatewords:50}}
+	                        {{seller.description|linebreaks}}
 	                        {% endautoescape %}
                         </p>
                         {% endif %}
                 </div>
                 
                 <div class="seller-image-container">
+                        <a href="{{seller.image.url}}" target="_blank">
                         <img class="seller-image" src="{{ seller.image.url }}">
+                </a>
                 </div>
         </div>
 </div>
