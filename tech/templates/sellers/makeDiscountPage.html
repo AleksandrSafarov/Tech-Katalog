@@ -1,0 +1,39 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Изменить цену{% endblock %}
+
+{% block extraheader %}
+{% endblock %}
+
+{% block content %}
+
+
+<div class="form-container">
+    <div class="form-title">
+		<label class="fs-3">Сделать скидку</label>
+	</div>
+    <form action="{% url 'makeDiscount' product.id %}">
+        <div class="form-group">
+            <div class="row">
+                <div class="row">
+        {% if hasDiscount %}
+            <input type="number" class="form-control" min="1" max="99" name="newDiscountValue" placeholder="Значение скидки в % (от 1 до 99). Сейчас {{ discount.0.value }}%">
+            <input type="number" class="form-control" min="1" max="30" name="addDays" placeholder="Сколько дней будет действовать скидка (до 30 дней). Сейчас до {{ discount.0.getdate }}">
+        {% else %}
+            <input type="number" class="form-control" required min="1" max="99" name="newDiscountValue" placeholder="Значение скидки в % (от 1 до 99)">
+            <input type="number" class="form-control" required min="1" max="30" name="addDays" placeholder="Сколько дней будет действовать скидка (до 30 дней)">
+        {% endif %}
+        
+    </div>
+    </div>
+    <div class="row">
+        <div class="row">
+        <input type="submit" value="Подтвердить" class="btn btn-primary">
+    </div>
+    </div>
+    </div>
+    </form>
+</div>
+
+{% endblock %}

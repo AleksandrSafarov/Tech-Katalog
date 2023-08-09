@@ -8,9 +8,9 @@ urlpatterns = [
     path('createproduct/', CreateProduct.as_view(), name='createProduct'),
     path('sellerarea/', SellerArea.as_view(), name='sellerArea'),
     path('management/', ProductManagement.as_view(), name='productManagement'),
-    path('newstock/<int:product_id>', changeStockPage, name='newStock'),
-    path('newstock/changeStock/<int:product_id>', changeStock, name='changeStock'),
-    path('newprice/<int:product_id>', changePricePage, name='newPrice'),
-    path('newprice/changePrice/<int:product_id>', changePrice, name='changePrice'),
+    path('newprice/<int:product_id>', changeDataPage, name='newData'),
+    path('newprice/changePrice/<int:product_id>', changeData, name='changeData'),
     path('addproductimage/<int:product_id>', addProductImage, name='addProductImage'),
+    path('makediscount/<int:product_id>', makeDiscountPage, name='makeDiscountPage'),
+    path('makediscount/discount/<int:product_id>', makeDiscount, name='makeDiscount'),
 ]

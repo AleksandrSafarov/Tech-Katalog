@@ -31,10 +31,10 @@ class CreateSellerForm(forms.ModelForm):
 class CreateProductForm(forms.ModelForm):
     name = forms.CharField(
         label='',
-        widget=forms.TextInput(attrs={'placeholder': "Название"})
+        widget=forms.TextInput(attrs={'placeholder': "Название (нельзя будет изменить)"})
         )
     category = forms.ModelChoiceField(
-        label="Категория товара",
+        label="Категория товара  (нельзя будет изменить)",
         queryset=Category.objects.all()
     )
     price = forms.IntegerField(
@@ -54,7 +54,7 @@ class CreateProductForm(forms.ModelForm):
         widget=forms.Textarea(attrs={'placeholder': "Описание товара"})
     )
     main_image = forms.ImageField(
-        label="Главное изображение товара"
+        label="Главное изображение товара  (нельзя будет изменить)"
         )
     class Meta:
         model = Product

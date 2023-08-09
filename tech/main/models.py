@@ -48,6 +48,9 @@ class Discount(models.Model):
 
     def __str__(self):
         return self.product.name + '; ' + str(self.value)
+    
+    def getdate(self):
+        return str(self.finish_date.day).zfill(2)+'.'+str(self.finish_date.month).zfill(2)+'.'+str(self.finish_date.year)
 
 class ProductRating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -11,13 +11,15 @@
 
 <div class="form-container">
     <div class="form-title">
-		<label class="fs-3">Изменить цену</label>
+		<label class="fs-3">Изменить цену, количество, описание товара</label>
 	</div>
-    <form action="{% url 'changePrice' product.id %}">
+    <form action="{% url 'changeData' product.id %}">
         <div class="form-group">
             <div class="row">
                 <div class="row">
         <input type="number" class="form-control" min="1" max="100000000000" name="newPrice" placeholder="{{ product.price }} ₽">
+        <input type="number" class="form-control" min="1" max="100000000" name="newStock" placeholder="{{ product.stock }}">
+        <textarea class="form-control" name="newDescription">{{ product.description }}</textarea>
         
     </div>
     </div>

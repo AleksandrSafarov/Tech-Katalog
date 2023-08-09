@@ -8,6 +8,8 @@ from main.models import *
 
 from main.models import *
 
+import datetime
+
 def sellerPage(request, seller_id):
     seller = Seller.objects.get(id=seller_id)
     if request.user.is_authenticated:
@@ -46,7 +48,7 @@ def changeStock(request, product_id):
         product.save()
     return redirect('productManagement')
 
-def changePricePage(request, product_id):
+def changeDataPage(request, product_id):
     product = Product.objects.get(id=product_id)
     seller = Seller.objects.get(user=request.user)
     if not seller:
@@ -57,9 +59,9 @@ def changePricePage(request, product_id):
         'product':product,
     }
     
-    return render(request, 'sellers/changePricePage.html', context=context)
+    return render(request, 'sellers/changeDataPage.html', context=context)
 
-def changePrice(request, product_id):
+def changeData(request, product_id):
     product = Product.objects.get(id=product_id)
     seller = Seller.objects.get(user=request.user)
     if not seller:
@@ -69,6 +71,14 @@ def changePrice(request, product_id):
     if request.GET.get('newPrice'):
         newPrice = int(request.GET.get('newPrice'))
         product.price = newPrice
+        product.save()
+    if request.GET.get('newStock'):
+        newStock = int(request.GET.get('newStock'))
+        product.stock = newStock
+        product.save()
+    if request.GET.get('newDescription'):
+        newDescription = request.GET.get('newDescription')
+        product.description = newDescription
         product.save()
     return redirect('productManagement')
 
@@ -93,6 +103,58 @@ def addProductImage(request, product_id):
         'form': form
     }
     return render(request, 'main/form.html', context=context)
+
+def makeDiscountPage(request, product_id):
+    product = Product.objects.get(id=product_id)
+    seller = Seller.objects.get(user=request.user)
+    if not seller:
+        raise Http404
+    if not product:
+        raise Http404
+    discount = list(Discount.objects.filter(product=product))
+    hasDiscount = False
+    if len(discount):
+        hasDiscount = True
+    context={
+        'product': product,
+        'discount': discount,
+        'hasDiscount': hasDiscount,
+    }
+    
+    return render(request, 'sellers/makeDiscountPage.html', context=context)
+
+def makeDiscount(request, product_id):
+    product = Product.objects.get(id=product_id)
+    seller = Seller.objects.get(user=request.user)
+    if not seller:
+        raise Http404
+    if not product:
+        raise Http404
+    discount = list(Discount.objects.filter(product=product))
+    print(len(discount))
+    if len(discount):
+        if request.GET.get('newDiscountValue'):
+            newDiscountValue = int(request.GET.get('newDiscountValue'))
+            discount[0].value = newDiscountValue
+            discount[0].save()
+        if request.GET.get('addDays'):
+            addDays = int(request.GET.get('addDays'))
+            newFinishDate = datetime.datetime.now() + datetime.timedelta(days=addDays)
+            newFinishDate = newFinishDate.replace(hour=23, minute=59, second=59)
+            discount[0].finish_date = newFinishDate
+            discount[0].save()
+    else:
+        if request.GET.get('newDiscountValue') and request.GET.get('addDays'):
+            newDiscountValue = int(request.GET.get('newDiscountValue'))
+            addDays = int(request.GET.get('addDays'))
+            newFinishDate = datetime.datetime.now() + datetime.timedelta(days=addDays)
+            newFinishDate = newFinishDate.replace(hour=23, minute=59, second=59)
+            newDiscount = Discount(value=newDiscountValue, product=product, finish_date=newFinishDate)
+            newDiscount.save()
+        else:
+            return redirect('makeDiscountPage')
+    
+    return redirect('productManagement')
 
 
 class SellerArea(IsSellerMixin, TemplateView):
