@@ -91,3 +91,51 @@ class Popularity(models.Model):
 
     class Meta:
         verbose_name_plural = "Popularity"
+
+class RAM(models.Model):
+    value = models.IntegerField()
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.value
+    
+    class Meta:
+        verbose_name_plural = "RAM"
+
+class RAMValue(models.Model):
+    value = models.IntegerField()
+
+    def __str__(self):
+        return self.value
+    
+    class Meta:
+        verbose_name_plural = "RAM values"
+
+class RAM(models.Model):
+    RAM_value = models.ForeignKey(RAMValue, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.RAM_value + ' ' + self.product
+    
+    class Meta:
+        verbose_name_plural = "RAM"
+
+class StorageValue(models.Model):
+    value = models.IntegerField()
+
+    def __str__(self):
+        return self.value
+    
+    class Meta:
+        verbose_name_plural = "Storage values"
+
+class Storage(models.Model):
+    storage_value = models.ForeignKey(StorageValue, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.storage_value + ' ' + self.product
+    
+    class Meta:
+        verbose_name_plural = "Storage"

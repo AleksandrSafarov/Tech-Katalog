@@ -27,9 +27,29 @@ class SellerRatingAdmin(admin.ModelAdmin):
     list_display = ('id', 'score', 'seller', 'user')
     list_display_links = ('id', 'score', 'seller')
 
+class RAMValueAdmin(admin.ModelAdmin):
+    list_display = ('id', 'value')
+    list_display_links = ('id', 'value')
+
+class RAMAdmin(admin.ModelAdmin):
+    list_display = ('id', 'RAM_value', 'product')
+    list_display_links = ('id', 'RAM_value')
+
+class StorageValueAdmin(admin.ModelAdmin):
+    list_display = ('id', 'value')
+    list_display_links = ('id', 'value')
+
+class StorageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'storage_value', 'product')
+    list_display_links = ('id', 'storage_value')
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductImage, ProductImageAdmin)
 admin.site.register(Discount, DiscountAdmin)
 admin.site.register(ProductRating, ProductRatingAdmin)
 admin.site.register(SellerRating, SellerRatingAdmin)
+admin.site.register(RAMValue, RAMValueAdmin)
+admin.site.register(RAM, RAMAdmin)
+admin.site.register(StorageValue, StorageValueAdmin)
+admin.site.register(Storage, StorageAdmin)
