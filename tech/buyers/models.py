@@ -10,7 +10,7 @@ class ProductInCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     count = models.PositiveIntegerField(default=1)
-    date = models.DateTimeField(default=datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(hours=3))
+    date = models.DateTimeField()
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

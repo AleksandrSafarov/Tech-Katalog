@@ -44,7 +44,7 @@ class ProductImage(models.Model):
 class Discount(models.Model):
     value = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(99)])
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    finish_date = models.DateTimeField(default=datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(hours=3))
+    finish_date = models.DateTimeField()
 
     def __str__(self):
         return self.product.name + '; ' + str(self.value)
@@ -53,19 +53,9 @@ class Discount(models.Model):
         return str(self.finish_date.day).zfill(2)+'.'+str(self.finish_date.month).zfill(2)+'.'+str(self.finish_date.year)
 
 class ProductRating(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.product.name + '; ' + str(self.score)
-
-    class Meta:
-        verbose_name_plural = "Product rating"
-
-class ProductRating(models.Model):
     score = models.IntegerField(default=1)
     text = models.TextField(null=True)
-    date = models.DateTimeField(default=datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(hours=3))
+    date = models.DateTimeField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
@@ -75,7 +65,7 @@ class ProductRating(models.Model):
 class SellerRating(models.Model):
     score = models.IntegerField(default=1)
     text = models.TextField(null=True)
-    date = models.DateTimeField(default=datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(hours=3))
+    date = models.DateTimeField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
 
@@ -84,23 +74,13 @@ class SellerRating(models.Model):
 
 class Popularity(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    finish_date = models.DateTimeField(default=datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(hours=3))
+    finish_date = models.DateTimeField()
 
     def __str__(self):
         return self.product.name
 
     class Meta:
         verbose_name_plural = "Popularity"
-
-class RAM(models.Model):
-    value = models.IntegerField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.value
-    
-    class Meta:
-        verbose_name_plural = "RAM"
 
 class RAMValue(models.Model):
     value = models.IntegerField()
