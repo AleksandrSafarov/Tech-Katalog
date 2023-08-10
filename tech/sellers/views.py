@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.views.generic import *
 
 from .models import *
@@ -11,7 +11,10 @@ from main.models import *
 import datetime
 
 def sellerPage(request, seller_id):
-    seller = Seller.objects.get(id=seller_id)
+    try:
+        seller = Seller.objects.get(id=seller_id)
+    except:
+        raise Http404
     if request.user.is_authenticated:
         if seller.user.id == request.user.id:
             return redirect('sellerArea')
@@ -22,38 +25,11 @@ def sellerPage(request, seller_id):
 
     return render(request, 'sellers/sellerPage.html', context=context)
 
-def changeStockPage(request, product_id):
-    product = Product.objects.get(id=product_id)
-    seller = Seller.objects.get(user=request.user)
-    if not seller:
-        raise Http404
-    if not product:
-        raise Http404
-    context={
-        'product':product,
-    }
-    
-    return render(request, 'sellers/changeStockPage.html', context=context)
-
-def changeStock(request, product_id):
-    product = Product.objects.get(id=product_id)
-    seller = Seller.objects.get(user=request.user)
-    if not seller:
-        raise Http404
-    if not product:
-        raise Http404
-    if request.GET.get('newStock'):
-        newStock = int(request.GET.get('newStock'))
-        product.stock = newStock
-        product.save()
-    return redirect('productManagement')
-
 def changeDataPage(request, product_id):
-    product = Product.objects.get(id=product_id)
-    seller = Seller.objects.get(user=request.user)
-    if not seller:
-        raise Http404
-    if not product:
+    try:
+        product = Product.objects.get(id=product_id)
+        seller = Seller.objects.get(user=request.user)
+    except:
         raise Http404
     context={
         'product':product,
@@ -62,17 +38,16 @@ def changeDataPage(request, product_id):
     return render(request, 'sellers/changeDataPage.html', context=context)
 
 def changeData(request, product_id):
-    product = Product.objects.get(id=product_id)
-    seller = Seller.objects.get(user=request.user)
-    if not seller:
-        raise Http404
-    if not product:
+    try:
+        product = Product.objects.get(id=product_id)
+        seller = Seller.objects.get(user=request.user)
+    except:
         raise Http404
     if request.GET.get('newPrice'):
         newPrice = int(request.GET.get('newPrice'))
         product.price = newPrice
         product.save()
-    if request.GET.get('newStock'):
+    if request.GET.get('newStock') or request.GET.get('newStock') == 0:
         newStock = int(request.GET.get('newStock'))
         product.stock = newStock
         product.save()
@@ -80,14 +55,15 @@ def changeData(request, product_id):
         newDescription = request.GET.get('newDescription')
         product.description = newDescription
         product.save()
-    return redirect('productManagement')
+    next = request.GET.get('next', '/')
+    print(next)
+    return HttpResponseRedirect(next)
 
 def addProductImage(request, product_id):
-    product = Product.objects.get(id=product_id)
-    seller = Seller.objects.get(user=request.user)
-    if not seller:
-        raise Http404
-    if not product:
+    try:
+        product = Product.objects.get(id=product_id)
+        seller = Seller.objects.get(user=request.user)
+    except:
         raise Http404
     if request.method == 'POST':
         form = ProductImageForm(request.POST, request.FILES)
@@ -105,30 +81,27 @@ def addProductImage(request, product_id):
     return render(request, 'main/form.html', context=context)
 
 def makeDiscountPage(request, product_id):
-    product = Product.objects.get(id=product_id)
-    seller = Seller.objects.get(user=request.user)
-    if not seller:
+    try:
+        product = Product.objects.get(id=product_id)
+        seller = Seller.objects.get(user=request.user)
+    except:
         raise Http404
-    if not product:
-        raise Http404
-    discount = list(Discount.objects.filter(product=product))
-    hasDiscount = False
-    if len(discount):
-        hasDiscount = True
+    try:
+        discount = Discount.objects.get(product=product)
+    except:
+        discount = False
     context={
         'product': product,
         'discount': discount,
-        'hasDiscount': hasDiscount,
     }
     
     return render(request, 'sellers/makeDiscountPage.html', context=context)
 
 def makeDiscount(request, product_id):
-    product = Product.objects.get(id=product_id)
-    seller = Seller.objects.get(user=request.user)
-    if not seller:
-        raise Http404
-    if not product:
+    try:
+        product = Product.objects.get(id=product_id)
+        seller = Seller.objects.get(user=request.user)
+    except:
         raise Http404
     discount = list(Discount.objects.filter(product=product))
     print(len(discount))

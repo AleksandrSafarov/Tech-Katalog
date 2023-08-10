@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-{% block title %}Изменить цену{% endblock %}
+{% block title %}Изменить данные{% endblock %}
 
 {% block extraheader %}
 {% endblock %}
@@ -11,18 +11,34 @@
 
 <div class="form-container">
     <div class="form-title">
-		<label class="fs-3">Изменить цену, количество, описание товара</label>
+		<label class="fs-3" style="margin-left: -5%;">Изменить цену, количество, описание товара</label>
 	</div>
     <form action="{% url 'changeData' product.id %}">
         <div class="form-group">
             <div class="row">
                 <div class="row">
-        <input type="number" class="form-control" min="1" max="100000000000" name="newPrice" placeholder="{{ product.price }} ₽">
-        <input type="number" class="form-control" min="1" max="100000000" name="newStock" placeholder="{{ product.stock }}">
-        <textarea class="form-control" name="newDescription">{{ product.description }}</textarea>
+        <input type="number" class="form-control" min="1" max="100000000000" name="newPrice" placeholder="Цена. Сейчас: {{ product.price }} ₽">
         
     </div>
+</div>
+<div class="row">
+    <div class="row">
+        <input type="number" class="form-control" min="0" max="100000000" name="newStock" placeholder="Количество. Сейчас: {{ product.stock }} шт.">
+        
     </div>
+</div>
+<div class="row">
+    <div class="row">
+<input type="hidden" name="next" value="{{ request.path }}">
+</div>
+</div>
+<div class="row">
+    <div class="row">
+        <textarea class="form-control" name="newDescription" placeholder="Описание товара">{{ product.description }}</textarea>
+        
+    </div>
+</div>
+        
     <div class="row">
         <div class="row">
         <input type="submit" value="Изменить" class="btn btn-primary">

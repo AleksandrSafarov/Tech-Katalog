@@ -6,6 +6,7 @@ from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.shortcuts import redirect
 from django.urls.base import reverse_lazy
 from django.views.generic import *
+from django.http import Http404
 
 from .forms import *
 from .models import *
@@ -42,17 +43,34 @@ def allProductsPage(request):
     return render(request, 'main/allProductsPage.html', context=context)
 
 def productPage(request, product_id):
-    product = Product.objects.get(id=product_id)
+    try:
+        product = Product.objects.get(id=product_id)
+    except:
+        raise Http404
     images = list(ProductImage.objects.filter(product=product))
     seller = Seller.objects.get(id=product.seller.id)
+    try:
+        discount = Discount.objects.get(product=product)
+    except:
+        discount = False
     context={
         'product': product,
         'images': images,
         'seller': seller,
+        'discount': discount,
     }
 
     return render(request, 'main/productPage.html', context=context)
 
+def deleteImage(request, product_id, image_id):
+    try:
+        product = Product.objects.get(id=product_id)
+        image = ProductImage.objects.get(id=image_id)
+        seller = Seller.objects.get(user=request.user)
+    except:
+        raise Http404
+    image.delete()
+    return redirect('product', product_id)
 
 class SignUp(CreateView):
     form_class = SignUpForm

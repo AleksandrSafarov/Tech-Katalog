@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load productTag %}
 
 {% block title %}Tech-Katalog{% endblock %}
 
@@ -10,6 +11,54 @@
 
 <div class="container">
   <div class="product-page">
+    {% if product.seller.user == user %}
+    <div class="product-title-and-images">
+      <h2 class="product-title">{{ product.name }}</h2>
+    </div>
+    <div class="product-images">
+      <p>Главное изображение</p>
+      <img src="{{ product.main_image.url }}" class="product-image">
+      {% if images %}
+      <hr class="image-line">
+      <p>Дополнительные избражения</p>
+      {% endif %}
+      {% for image in images %}
+      <img src="{{ image.image.url }}" class="product-image" style="margin-bottom: 1%;">
+      <form action="{% url 'deleteImage' product.id image.id %}">
+      <button type="submit" class="btn btn-outline-danger"><span class="bi bi-trash" style="color: rgb(255, 0, 0);"></span> Удалить изображение</button>
+    </form>
+      <hr class="image-line">
+      {% endfor %}
+      <hr style="visibility: hidden; margin-bottom: 7%;">
+    </div>
+    
+    <div class="product-info">
+      {% if not discount %}
+      <h2>{{ product.price }} ₽</h2>
+      {% else %}
+      <span class="product-page-price-discount">{% getPriceWithDiscount product.price discount.value %} ₽</span> <span class="discount"><b> -{{ discount.value }}%</b></span>
+      <p style="margin-bottom: 0; font-size: smaller;"><s>{{ product.price }} ₽</s>.<br>Скидка действует до {{ discount.getdate }}.</p>
+      {% endif %}
+      {% if product.stock %}
+      <p>Количество: {{ product.stock }} шт.</p>
+      {% else %}
+      <p>Нет в наличии</p>
+      {% endif %}
+      <hr style="visibility: hidden; margin-top: 0; margin-bottom: 0;">
+      <p>Это Ваш товар. <a href="{% url 'productManagement' %}" class="link-dark">Профиль продавца</a></p>
+      <a href="{% url 'newData' product.id %}" class="text-decoration-none">
+        <button class="btn btn-primary">Изменить данные</button>
+      </a>
+      <hr style="visibility: hidden; margin-top: 0; margin-bottom: 1%;">
+      <a href="{% url 'addProductImage' product.id %}" class="text-decoration-none">
+        <button class="btn btn-dark">Добавить изображение</button>
+      </a>
+      <hr style="visibility: hidden; margin-top: 0; margin-bottom: 1%;">
+      <a href="{% url 'makeDiscountPage' product.id %}" class="text-decoration-none">
+        <button class="btn btn-danger">Сделать скидку</button>
+      </a>
+    </div>
+    {% else %}
     <div class="product-title-and-images">
         <h2 class="product-title">{{ product.name }}</h2>
         <div  style="width:500px; height:500px; margin-top: 5%; margin-left: -1%;">
@@ -40,14 +89,34 @@
         </div>
       </div>
       <div class="product-info">
+        {% if not discount %}
         <h2>{{ product.price }} ₽</h2>
+        {% else %}
+        <span class="product-page-price-discount">{% getPriceWithDiscount product.price discount.value %} ₽</span> <span class="discount"><b> -{{ discount.value }}%</b></span>
+        <p style="margin-bottom: 0; font-size: smaller;"><s>{{ product.price }} ₽</s>.<br>Скидка действует до {{ discount.getdate }}.</p>
+        {% endif %}
+        {% if product.stock %}
         <p>Количество: {{ product.stock }} шт.</p>
         <a href="#">
           <button class="btn btn-danger">Добавить в корзину</button>
-        </a> 
+        </a>
+        {% else %}
+        <p>Нет в наличии</p>
+        {% endif %}
         <hr style="visibility: hidden;">
         <p>Продавец: <a href="{% url 'seller' seller.id %}" class="link-dark">{{ seller }}</a></p>
       </div>
+  {% endif %}
+  </div>
+  <div class="product-description">
+    <h3>Описание</h3>
+    <div class="product-description-text">
+    <p>
+      {% autoescape on %}
+      {{product.description|linebreaks}}
+      {% endautoescape %}
+    </p>
+  </div>
   </div>
 </div>
 

@@ -16,8 +16,8 @@
                         <tr>
                           <th scope="col">Название</th>
                           <th scope="col">Категория</th>
-                          <th scope="col">Кол-во</th>
                           <th scope="col">Цена (₽)</th>
+                          <th scope="col">Кол-во</th>
                           <th scope="col"></th>
                         </tr>
                 </thead>
@@ -32,8 +32,8 @@
                                 </a>
                         </th>
                         <td>{{ product.category }}</td>
-                        <td>{{ product.get_stock }}</td>
                         <td>{{ product.price }}</td>
+                        <td>{{ product.getStock }}</td>
                         <td>
                                 <a href="{% url 'newData' product.id %}" class="text-decoration-none">
                                         <button class="btn btn-primary">Изменить данные</button>

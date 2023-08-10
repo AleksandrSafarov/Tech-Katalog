@@ -29,7 +29,7 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
-    def get_stock(self):
+    def getStock(self):
         if self.stock:
             return self.stock
         return 'Нет в наличии'
@@ -61,6 +61,7 @@ class ProductRating(models.Model):
 
     def __str__(self):
         return self.product + ': ' + self.user + ': ' + self.date
+    
 
 class SellerRating(models.Model):
     score = models.IntegerField(default=1)
@@ -70,7 +71,7 @@ class SellerRating(models.Model):
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.product + ': ' + self.user + ': ' + self.date
+        return self.seller + ': ' + self.user + ': ' + self.date
 
 class Popularity(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -86,7 +87,7 @@ class RAMValue(models.Model):
     value = models.IntegerField()
 
     def __str__(self):
-        return self.value
+        return str(self.value)
     
     class Meta:
         verbose_name_plural = "RAM values"
@@ -96,7 +97,7 @@ class RAM(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.RAM_value + ' ' + self.product
+        return str(self.RAM_value) + ' ' + self.product
     
     class Meta:
         verbose_name_plural = "RAM"
@@ -105,7 +106,7 @@ class StorageValue(models.Model):
     value = models.IntegerField()
 
     def __str__(self):
-        return self.value
+        return str(self.value)
     
     class Meta:
         verbose_name_plural = "Storage values"
@@ -115,7 +116,7 @@ class Storage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.storage_value + ' ' + self.product
+        return str(self.storage_value) + ' ' + self.product
     
     class Meta:
         verbose_name_plural = "Storage"
