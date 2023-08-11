@@ -53,7 +53,7 @@ class Discount(models.Model):
         return str(self.finish_date.day).zfill(2)+'.'+str(self.finish_date.month).zfill(2)+'.'+str(self.finish_date.year)
 
 class ProductRating(models.Model):
-    score = models.IntegerField(default=1)
+    value = models.IntegerField(default=1)
     text = models.TextField(null=True)
     date = models.DateTimeField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -64,7 +64,7 @@ class ProductRating(models.Model):
     
 
 class SellerRating(models.Model):
-    score = models.IntegerField(default=1)
+    value = models.IntegerField(default=1)
     text = models.TextField(null=True)
     date = models.DateTimeField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -20,12 +20,12 @@ class DiscountAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'value', 'product')
 
 class ProductRatingAdmin(admin.ModelAdmin):
-    list_display = ('id', 'score', 'product', 'user')
-    list_display_links = ('id', 'score', 'product')
+    list_display = ('id', 'value', 'product', 'user')
+    list_display_links = ('id', 'value', 'product')
 
 class SellerRatingAdmin(admin.ModelAdmin):
-    list_display = ('id', 'score', 'seller', 'user')
-    list_display_links = ('id', 'score', 'seller')
+    list_display = ('id', 'value', 'seller', 'user')
+    list_display_links = ('id', 'value', 'seller')
 
 class RAMValueAdmin(admin.ModelAdmin):
     list_display = ('id', 'value')
