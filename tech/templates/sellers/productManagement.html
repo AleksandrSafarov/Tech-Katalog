@@ -35,14 +35,15 @@
                         <td>{{ product.price }}</td>
                         <td>{{ product.getStock }}</td>
                         <td>
-                                <a href="{% url 'newData' product.id %}" class="text-decoration-none">
-                                        <button class="btn btn-primary">Изменить данные</button>
+                                <a href="{% url 'newData' product.id path %}" class="text-decoration-none">
+                                        <button class="btn btn-outline-primary">Изменить данные</button>
                                 </a>
+                                <hr style="visibility: hidden; margin-top: 0; margin-bottom: 1%;">
                                 <a href="{% url 'addProductImage' product.id %}" class="text-decoration-none">
                                         <button class="btn btn-outline-dark">Добавить изображение</button>
                                 </a>
-                                <hr style="visibility: hidden; margin-top: 0;">
-                                <a href="{% url 'makeDiscountPage' product.id %}" class="text-decoration-none">
+                                <hr style="visibility: hidden; margin-top: 0; margin-bottom: 1%;">
+                                <a href="{% url 'makeDiscountPage' product.id path%}" class="text-decoration-none">
                                         <button class="btn btn-outline-danger">Сделать скидку</button>
                                 </a>
                         </td>

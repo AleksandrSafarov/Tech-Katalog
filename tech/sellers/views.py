@@ -25,7 +25,7 @@ def sellerPage(request, seller_id):
 
     return render(request, 'sellers/sellerPage.html', context=context)
 
-def changeDataPage(request, product_id):
+def changeDataPage(request, product_id, previous_url):
     try:
         product = Product.objects.get(id=product_id)
         seller = Seller.objects.get(user=request.user)
@@ -33,9 +33,19 @@ def changeDataPage(request, product_id):
         raise Http404
     context={
         'product':product,
+        'previous_url': previous_url.replace('-', '/')
     }
     
     return render(request, 'sellers/changeDataPage.html', context=context)
+
+def changeDataPageWithoutPrevious(request, product_id):
+    try:
+        product = Product.objects.get(id=product_id)
+        seller = Seller.objects.get(user=request.user)
+    except:
+        raise Http404
+    
+    return redirect('newData', product_id, '-management-')
 
 def changeData(request, product_id):
     try:
@@ -56,7 +66,6 @@ def changeData(request, product_id):
         product.description = newDescription
         product.save()
     next = request.GET.get('next', '/')
-    print(next)
     return HttpResponseRedirect(next)
 
 def addProductImage(request, product_id):
@@ -70,7 +79,7 @@ def addProductImage(request, product_id):
         if form.is_valid():
             form.instance.product = product
             form.save()
-            return redirect('productManagement')
+            return redirect('product', product_id)
     else:
         form = ProductImageForm
     context={
@@ -80,7 +89,7 @@ def addProductImage(request, product_id):
     }
     return render(request, 'main/form.html', context=context)
 
-def makeDiscountPage(request, product_id):
+def makeDiscountPage(request, product_id, previous_url):
     try:
         product = Product.objects.get(id=product_id)
         seller = Seller.objects.get(user=request.user)
@@ -93,9 +102,19 @@ def makeDiscountPage(request, product_id):
     context={
         'product': product,
         'discount': discount,
+        'previous_url': previous_url.replace('-', '/')
     }
     
     return render(request, 'sellers/makeDiscountPage.html', context=context)
+
+def makeDiscountPageWithoutPrevious(request, product_id):
+    try:
+        product = Product.objects.get(id=product_id)
+        seller = Seller.objects.get(user=request.user)
+    except:
+        raise Http404
+    
+    return redirect('makeDiscountPage', product_id, '-management-')
 
 def makeDiscount(request, product_id):
     try:
@@ -127,7 +146,8 @@ def makeDiscount(request, product_id):
         else:
             return redirect('makeDiscountPage')
     
-    return redirect('productManagement')
+    next = request.GET.get('next', '/')
+    return HttpResponseRedirect(next)
 
 
 class SellerArea(IsSellerMixin, TemplateView):
@@ -150,6 +170,7 @@ class ProductManagement(IsSellerMixin, TemplateView):
 
         context['products'] = products
         context['total_obj'] = len(products)
+        context['path'] = self.request.path.replace('/', '-')
         return context
 
 

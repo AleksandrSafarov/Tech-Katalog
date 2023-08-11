@@ -26,7 +26,6 @@ class Index(TemplateView):
 def categoryPage(request, category_id):
     category = Category.objects.get(id=category_id)
     products = list(Product.objects.filter(category=category))
-
     context={
         'products':products,
     }
@@ -58,6 +57,7 @@ def productPage(request, product_id):
         'images': images,
         'seller': seller,
         'discount': discount,
+        'path': request.path.replace('/', '-')
     }
 
     return render(request, 'main/productPage.html', context=context)
