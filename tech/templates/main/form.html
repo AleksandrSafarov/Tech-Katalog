@@ -12,7 +12,7 @@
 		<label class="fs-3">{{ title }}</label>
 	</div>
 	<form method="POST" action="" enctype="multipart/form-data">
-		<div class="form-group">
+		<div class="form-group"> 
 			{% csrf_token %}
 
 			{% for field in form %}
