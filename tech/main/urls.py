@@ -7,6 +7,7 @@ urlpatterns = [
     path('category/<int:category_id>', categoryPage, name='category'),
     path('all/', allProductsPage, name='all'),
     path('product/<int:product_id>', productPage, name='product'),
+    path('product/makeProductReview/<int:product_id>', makeProductReview, name='makeProductReview'),
     path('logout/', logout_user, name='logout'),
     path('product/<int:product_id>/deleteImage/<int:image_id>', deleteImage, name='deleteImage'),
     path('signup/', SignUp.as_view(), name='signup'),

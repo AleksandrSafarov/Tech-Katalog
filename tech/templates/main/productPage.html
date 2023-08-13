@@ -122,6 +122,86 @@
     </p>
   </div>
   </div>
+  {% if not product.seller.user == user %}
+  <div class="make-review">
+    {% if productRating %}
+    <h3>Изменить отзыв на товар</h3>
+    <p>Последний отзыв был оставлен: {{ productRating.getdate }}.</p>
+    <form action="{% url 'makeProductReview' product.id %}">
+      <div class="form-group">
+        <ul class="rating-list">
+          {% if productRating.value == 1 %}
+            <li class="rating-element"><input type="radio" name="rating" value="1" checked="checked" /> 1 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+          {% else %}
+          <li class="rating-element"><input type="radio" name="rating" value="1" /> 1 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+          {% endif %}
+            <li class="rating-element"><div class="vertical"></div></li>
+            {% if productRating.value == 2 %}
+            <li class="rating-element"><input type="radio" name="rating" value="2" checked="checked" /> 2 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+          {% else %}
+          <li class="rating-element"><input type="radio" name="rating" value="2" /> 2 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+          {% endif %}
+            <li class="rating-element"><div class="vertical"></div></li>
+            {% if productRating.value == 3 %}
+            <li class="rating-element"><input type="radio" name="rating" value="3" checked="checked" /> 3 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+          {% else %}
+          <li class="rating-element"><input type="radio" name="rating" value="3" /> 3 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+          {% endif %}
+            <li class="rating-element"><div class="vertical"></div></li>
+            {% if productRating.value == 4 %}
+            <li class="rating-element"><input type="radio" name="rating" value="4" checked="checked" /> 4 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+          {% else %}
+          <li class="rating-element"><input type="radio" name="rating" value="4" /> 4 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+          {% endif %}
+            <li class="rating-element"><div class="vertical"></div></li>
+            {% if productRating.value == 5 %}
+            <li class="rating-element"><input type="radio" name="rating" value="5" checked="checked" /> 5 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+          {% else %}
+          <li class="rating-element"><input type="radio" name="rating" value="5" /> 5 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+          {% endif %}
+          </ul>
+            <div class="row">
+  <div class="row">
+    <textarea class="form-control" name="reviewText" placeholder="Напишите отзыв">{{ productRating.text }}</textarea>
+  </div>
+  </div>
+  
+  
+<div class="row">
+  <div class="row">
+  <input type="submit" value="Отправить" class="btn btn-dark">
+</div>
+</div>
+</div>
+    {% else %}
+  <h3>Оценить товар</h3>
+  <form action="{% url 'makeProductReview' product.id %}">
+    <div class="form-group">
+      <ul class="rating-list">
+          <li class="rating-element"><input type="radio" name="rating" value="1" /> 1 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+          <li class="rating-element"><div class="vertical"></div></li>
+          <li class="rating-element"><input type="radio" name="rating" value="2" /> 2 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li> 
+          <li class="rating-element"><div class="vertical"></div></li>
+          <li class="rating-element"><input type="radio" name="rating" value="3" /> 3 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li> 
+          <li class="rating-element"><div class="vertical"></div></li>
+          <li class="rating-element"><input type="radio" name="rating" value="4" /> 4 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li> 
+          <li class="rating-element"><div class="vertical"></div></li>
+          <li class="rating-element"><input type="radio" name="rating" value="5" checked="checked" /> 5 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li> 
+        </ul>
+          <div class="row">
+<div class="row">
+  <textarea class="form-control" name="reviewText" placeholder="Напишите отзыв"></textarea>
+</div>
+</div>
+<div class="row">
+  <div class="row">
+  <input type="submit" value="Отправить" class="btn btn-dark">
+</div>
+</div>
+{% endif %}
+  </form>
+</div>
+  {% endif %}
 </div>
 
 {% endblock %}

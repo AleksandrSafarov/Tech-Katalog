@@ -148,3 +148,24 @@ div.product-description-text{
     width: 60%;
     word-wrap: break-word;
 }
+
+div.vertical{
+    border-left: 1px solid grey;
+    height: 20px;
+}
+
+ul.rating-list{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+li.rating-element{
+    float:left;
+    margin-left:1%;
+}
+
+div.make-review{
+    width: 35%;
+}

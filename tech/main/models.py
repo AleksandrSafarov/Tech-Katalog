@@ -60,8 +60,10 @@ class ProductRating(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.product + ': ' + self.user + ': ' + self.date
+        return self.product.name + ': ' + str(self.value)
     
+    def getdate(self):
+        return str(self.date.day).zfill(2)+'.'+str(self.date.month).zfill(2)+'.'+str(self.date.year)
 
 class SellerRating(models.Model):
     value = models.IntegerField(default=1)

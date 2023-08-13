@@ -11,6 +11,8 @@ from django.http import Http404
 from .forms import *
 from .models import *
 
+import datetime
+
 class Index(TemplateView):
     template_name = 'main/index.html'
 
@@ -52,12 +54,17 @@ def productPage(request, product_id):
         discount = Discount.objects.get(product=product)
     except:
         discount = False
+    try:
+        productRating = ProductRating.objects.get(user=request.user, product=product)
+    except:
+        productRating = False
     context={
         'product': product,
         'images': images,
         'seller': seller,
         'discount': discount,
-        'path': request.path.replace('/', '-')
+        'path': request.path.replace('/', '-'),
+        'productRating': productRating,
     }
 
     return render(request, 'main/productPage.html', context=context)
@@ -70,6 +77,33 @@ def deleteImage(request, product_id, image_id):
     except:
         raise Http404
     image.delete()
+    return redirect('product', product_id)
+
+def makeProductReview(request, product_id):
+    try:
+        product = Product.objects.get(id=product_id)
+    except:
+        raise Http404
+    if (not request.user.is_authenticated) or request.user == product.seller.user :
+        raise Http404
+    if len(ProductRating.objects.filter(product=product, user=request.user)):
+        productRatingIsCreated = True
+    else:
+        productRatingIsCreated = False
+    if productRatingIsCreated:
+        productRating = ProductRating.objects.get(user=request.user, product=product)
+        if request.GET.get('rating'):
+            productRating.value = int(request.GET.get('rating'))
+            productRating.date = datetime.datetime.now()
+        productRating.text = request.GET.get('reviewText')
+        productRating.date = datetime.datetime.now()
+        productRating.save()
+    else:
+        if request.GET.get('rating'):
+            productRating = ProductRating(value=int(request.GET.get('rating')), date=datetime.datetime.now(), user=request.user, product=product)
+            if request.GET.get('reviewText'):
+                productRating.text = request.GET.get('reviewText')
+            productRating.save()
     return redirect('product', product_id)
 
 class SignUp(CreateView):
