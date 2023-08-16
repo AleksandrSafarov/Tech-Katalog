@@ -17,6 +17,19 @@
     </div>
     <div class="product-images">
       <p>Главное изображение</p>
+      <p>
+        {% if reviews %}
+        <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 1.75 %}bi-star-fill{% elif avgRating > 1.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 2.75 %}bi-star-fill{% elif avgRating > 2.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 3.75 %}bi-star-fill{% elif avgRating > 3.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 4.75 %}bi-star-fill{% elif avgRating > 4.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span> 
+        <span: style="color: black;"> {{ avgRating }} | Оценок: {{ reviewsCount }}</span>
+        {% else %}
+        <p style="color: gray;">Нет оценок</p>
+        {% endif %}
+      </p>
+      </p>
       <img src="{{ product.main_image.url }}" class="product-image">
       {% if images %}
       <hr class="image-line">
@@ -61,6 +74,19 @@
     {% else %}
     <div class="product-title-and-images">
         <h2 class="product-title">{{ product.name }}</h2>
+        
+      <p>
+        {% if reviews %}
+        <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 1.75 %}bi-star-fill{% elif avgRating > 1.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 2.75 %}bi-star-fill{% elif avgRating > 2.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 3.75 %}bi-star-fill{% elif avgRating > 3.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 4.75 %}bi-star-fill{% elif avgRating > 4.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span> 
+        <span: style="color: black;"> {{ avgRating }} | Оценок: {{ reviewsCount }}</span>
+        {% else %}
+        <p style="color: gray;">Нет оценок</p>
+        {% endif %}
+      </p>
         <div  style="width:500px; height:500px; margin-top: 5%; margin-left: -1%; align-items: center;">
         {% if images %}
         <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
@@ -122,13 +148,16 @@
     </p>
   </div>
   </div>
+  <hr style="visibility: hidden;">
   {% if not product.seller.user == user %}
   <div class="make-review">
     {% if productRating %}
     <h3>Изменить отзыв на товар</h3>
     <p>Последний отзыв был оставлен: {{ productRating.getdate }}.</p>
-    <form action="{% url 'makeProductReview' product.id %}">
+    <form action="{% url 'makeProductReview' product.id %}" style="margin-left: 2%;">
       <div class="form-group">
+        <div class="row">
+          <div class="row">
         <ul class="rating-list">
           {% if productRating.value == 1 %}
             <li class="rating-element"><input type="radio" name="rating" value="1" checked="checked" /> 1 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
@@ -160,9 +189,25 @@
           <li class="rating-element"><input type="radio" name="rating" value="5" /> 5 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
           {% endif %}
           </ul>
-            <div class="row">
+        </div>
+      </div>
+      <hr style="visibility: hidden; margin-bottom: 0;">
+      <div class="row">
+        <div class="row">
+          <p>Что понравилось:</p>
+          <textarea class="form-control" name="plusText">{% if productRating and productRating.plus %}{{ productRating.plus }}{% endif %}</textarea>
+        </div>
+        </div>
+        <div class="row">
+          <div class="row">
+            <p>Что не понравилось:</p>
+            <textarea class="form-control" name="minusText">{% if productRating and productRating.minus %}{{ productRating.minus }}{% endif %}</textarea>
+          </div>
+          </div>
   <div class="row">
-    <textarea class="form-control" name="reviewText" placeholder="Напишите отзыв">{{ productRating.text }}</textarea>
+  <div class="row">
+    <p>Комментарий:</p>
+    <textarea class="form-control" name="reviewText">{% if productRating and productRating.text %}{{ productRating.text }}{% endif %}</textarea>
   </div>
   </div>
   
@@ -175,7 +220,7 @@
 </div>
     {% else %}
   <h3>Оценить товар</h3>
-  <form action="{% url 'makeProductReview' product.id %}">
+  <form action="{% url 'makeProductReview' product.id %}" style="margin-left: 2%">
     <div class="form-group">
       <ul class="rating-list">
           <li class="rating-element"><input type="radio" name="rating" value="1" /> 1 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
@@ -188,20 +233,97 @@
           <li class="rating-element"><div class="vertical"></div></li>
           <li class="rating-element"><input type="radio" name="rating" value="5" checked="checked" /> 5 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li> 
         </ul>
+          
+      <hr style="visibility: hidden; margin-bottom: 0;">
+      <div class="row">
+        <div class="row">
+          <p>Что понравилось:</p>
+          <textarea class="form-control" name="plusText">{% if productRating and productRating.plus %}{{ productRating.plus }}{% endif %}</textarea>
+        </div>
+        </div>
+        <div class="row">
           <div class="row">
-<div class="row">
-  <textarea class="form-control" name="reviewText" placeholder="Напишите отзыв"></textarea>
-</div>
-</div>
+            <p>Что не понравилось:</p>
+            <textarea class="form-control" name="minusText">{% if productRating and productRating.minus %}{{ productRating.minus }}{% endif %}</textarea>
+          </div>
+          </div>
+  <div class="row">
+  <div class="row">
+    <p>Комментарий:</p>
+    <textarea class="form-control" name="reviewText">{% if productRating and productRating.text %}{{ productRating.text }}{% endif %}</textarea>
+  </div>
+  </div>
 <div class="row">
   <div class="row">
   <input type="submit" value="Отправить" class="btn btn-dark">
 </div>
 </div>
+    </div>
 {% endif %}
   </form>
 </div>
+{% endif %}
+<hr style="visibility: hidden;">
+<div class="reviews">
+  {% if reviews %}
+  <h3>Оценки и отзывы на товар</h3>
+  <h3>{{ avgRating }} 
+    <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+    <span id="boot-icon" class="bi {% if avgRating > 1.7 %}bi-star-fill{% elif avgRating > 1.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+    <span id="boot-icon" class="bi {% if avgRating > 2.7 %}bi-star-fill{% elif avgRating > 2.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+    <span id="boot-icon" class="bi {% if avgRating > 3.7 %}bi-star-fill{% elif avgRating > 3.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+    <span id="boot-icon" class="bi {% if avgRating > 4.7 %}bi-star-fill{% elif avgRating > 4.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+  </h3>
+  
+  {% if reviewsWithoutUser %}
+  <p>Оценок: {{ reviewsCount }} | Отзывов: {{ reviewsWithTextCount }}</p>
+  
+  <hr style="width: 50%;">
+  {% for review in reviewsWithoutUser %}
+  <div class="review-in-product-page">
+    <b>{{ review.user }}</b>
+    <br>
+     <span>
+    <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+    <span id="boot-icon" class="bi {% if review.value >= 2 %}bi-star-fill{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+    <span id="boot-icon" class="bi {% if review.value >= 3 %}bi-star-fill{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+    <span id="boot-icon" class="bi {% if review.value >= 4 %}bi-star-fill{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+    <span id="boot-icon" class="bi {% if review.value >= 5 %}bi-star-fill{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+  </span>
+  <br>
+  <span>Отзыв был оставлен: {{ review.getdate }}</span>
+  <p></p>
+  {% if review.plus %}
+  <b>Достоинства:</b>
+  {{review.plus|linebreaks|truncatechars:100}}
   {% endif %}
+  {% if review.minus %}
+  <b>Недостатки:</b>
+  {{review.minus|linebreaks|truncatechars:100}}
+  {% endif %}
+  {% if review.text %}
+  <b>Комментарий:</b>
+  {{review.text|linebreaks|truncatechars:100}}
+  {% endif %}
+  </div>
+  <hr style="width: 50%;">
+  {% endfor %}
+  <a href="{% url 'productReviews' product.id 1 %}">
+    <button style="width: 50%;" class="btn btn-outline-dark">Показать все</button>
+  </a>
+  {% else %}
+  <p>Оценок: {{ reviewsCount }}. Нет отзывов от других пользователей.</p>
+  {% endif %}
+
+  {% else %}
+  <h3>Нет оценок </h3>
+    <span id="boot-icon" class="bi bi-star" style="font-size: 1rem; color: grey;"></span>
+    <span id="boot-icon" class="bi bi-star" style="font-size: 1rem; color: grey;"></span>
+    <span id="boot-icon" class="bi bi-star" style="font-size: 1rem; color: grey;"></span>
+    <span id="boot-icon" class="bi bi-star" style="font-size: 1rem; color: grey;"></span>
+    <span id="boot-icon" class="bi bi-star" style="font-size: 1rem; color: grey;"></span>
+  {% endif %}
+</div>
 </div>
 
 {% endblock %}

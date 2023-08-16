@@ -54,6 +54,8 @@ class Discount(models.Model):
 
 class ProductRating(models.Model):
     value = models.IntegerField(default=1)
+    plus = models.TextField(null=True)
+    minus = models.TextField(null=True)
     text = models.TextField(null=True)
     date = models.DateTimeField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)

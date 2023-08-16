@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from django.urls.base import reverse_lazy
 from django.views.generic import *
 from django.http import Http404
+from django.db.models import Q
 
 from .forms import *
 from .models import *
@@ -58,6 +59,29 @@ def productPage(request, product_id):
         productRating = ProductRating.objects.get(user=request.user, product=product)
     except:
         productRating = False
+    allReviews = list(ProductRating.objects.filter(product=product))
+    reviewsCount = len(allReviews)
+    try:
+        avgRating = round(sum(r.value for r in allReviews) / len(allReviews), 2)
+    except:
+        avgRating = 0
+    if avgRating % 1 == 0:
+        avgRating = int(avgRating)
+    if request.user.is_authenticated:
+        revs = list(ProductRating.objects.filter(product=product).exclude(user=request.user))
+    else:
+        revs = list(ProductRating.objects.filter(product=product))
+    revs.sort(key=lambda x: x.date, reverse=True)
+    reviewsWithoutUser = []
+    for r in revs:
+        if r.text or r.plus or r.minus:
+            reviewsWithoutUser.append(r)
+        if len(reviewsWithoutUser) == 3:
+            break
+    reviewsWithTextCount = len(reviewsWithoutUser)
+    if productRating:
+        if productRating.text or productRating.plus or productRating.minus:
+            reviewsWithTextCount += 1
     context={
         'product': product,
         'images': images,
@@ -65,6 +89,12 @@ def productPage(request, product_id):
         'discount': discount,
         'path': request.path.replace('/', '-'),
         'productRating': productRating,
+        'reviews': allReviews,
+        'reviewsCount': reviewsCount,
+        'avgRating': avgRating,
+        'reviewsWithoutUser': reviewsWithoutUser,
+        'moreThen3Reviews': len(reviewsWithoutUser) > 3,
+        'reviewsWithTextCount': reviewsWithTextCount,
     }
 
     return render(request, 'main/productPage.html', context=context)
@@ -96,6 +126,8 @@ def makeProductReview(request, product_id):
             productRating.value = int(request.GET.get('rating'))
             productRating.date = datetime.datetime.now()
         productRating.text = request.GET.get('reviewText')
+        productRating.plus = request.GET.get('plusText')
+        productRating.minus = request.GET.get('minusText')
         productRating.date = datetime.datetime.now()
         productRating.save()
     else:
@@ -103,8 +135,53 @@ def makeProductReview(request, product_id):
             productRating = ProductRating(value=int(request.GET.get('rating')), date=datetime.datetime.now(), user=request.user, product=product)
             if request.GET.get('reviewText'):
                 productRating.text = request.GET.get('reviewText')
+            if request.GET.get('plusText'):
+                productRating.plus = request.GET.get('plusText')
+            if request.GET.get('minusText'):
+                productRating.minus = request.GET.get('minusText')
             productRating.save()
     return redirect('product', product_id)
+
+def productReviewsPage(request, product_id, sort_key):
+    try:
+        product = Product.objects.get(id=product_id)
+    except:
+        raise Http404
+    try:
+        productRating = ProductRating.objects.get(user=request.user, product=product)
+    except:
+        productRating = False
+    allReviews = list(ProductRating.objects.filter(product=product))
+    reviewsCount = len(allReviews)
+    try:
+        avgRating = round(sum(r.value for r in allReviews) / len(allReviews), 2)
+    except:
+        avgRating = 0
+    if avgRating % 1 == 0:
+        avgRating = int(avgRating)
+    if request.user.is_authenticated:
+        reviewsWithoutUser = list(ProductRating.objects.filter(product=product).exclude(user=request.user))
+    else:
+        reviewsWithoutUser = list(ProductRating.objects.filter(product=product))
+    reviewsWithoutUser.sort(key=lambda x: x.date, reverse=True)
+    if len(reviewsWithoutUser) < 3:
+        raise Http404
+    reviewsWithTextCount = len(reviewsWithoutUser)
+    if productRating:
+        if productRating.text or productRating.plus or productRating.minus:
+            reviewsWithTextCount += 1
+    context={
+        'product': product,
+        'productRating': productRating,
+        'reviews': allReviews,
+        'reviewsCount': reviewsCount,
+        'avgRating': avgRating,
+        'reviewsWithoutUser': reviewsWithoutUser,
+        'reviewsWithTextCount': reviewsWithTextCount,
+    }
+
+    return render(request, 'main/productReviewsPage.html', context=context)
+
 
 class SignUp(CreateView):
     form_class = SignUpForm

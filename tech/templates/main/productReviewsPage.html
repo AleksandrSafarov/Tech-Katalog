@@ -1,0 +1,69 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Tech-Katalog{% endblock %}
+
+{% block extraheader %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h3 class="product-title">{{ product.name }}</h3>
+    <p>
+        <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 1.75 %}bi-star-fill{% elif avgRating > 1.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 2.75 %}bi-star-fill{% elif avgRating > 2.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 3.75 %}bi-star-fill{% elif avgRating > 3.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 4.75 %}bi-star-fill{% elif avgRating > 4.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span> 
+        <span: style="color: black;"> {{ avgRating }}</span>
+    </p>
+    <p>Оценок: {{ reviewsCount }} | Отзывов: {{ reviewsWithTextCount }}</p>
+    <hr>
+    <h2>Отзывы</h2>
+    <p>Сортировать:</p>
+    <ul class="rating-list">
+        <li class="rating-element">
+            <p>по дате:</p>
+            <p>по возрастанию | по убыванию</p>
+        </li>
+        <li class="rating-element">
+            <div class="vertical" style="height: 70px;"></div>
+        </li>
+        <li class="rating-element">
+            <p>по оценке:</p>
+            <p>по возрастанию | по убыванию</p>
+        </li>
+        </ul>
+    {% for review in reviewsWithoutUser %}
+  <div class="review">
+    <b>{{ review.user }}</b>
+    <br>
+     <span>
+    <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+    <span id="boot-icon" class="bi {% if review.value >= 2 %}bi-star-fill{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+    <span id="boot-icon" class="bi {% if review.value >= 3 %}bi-star-fill{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+    <span id="boot-icon" class="bi {% if review.value >= 4 %}bi-star-fill{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+    <span id="boot-icon" class="bi {% if review.value >= 5 %}bi-star-fill{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+  </span>
+  <br>
+  <span>Отзыв был оставлен: {{ review.getdate }}</span>
+  <p></p>
+  {% if review.plus %}
+  <p style="margin-bottom: 0;"><b>Достоинства:</b></p>
+  {{review.plus|linebreaks}}
+  {% endif %}
+  {% if review.minus %}
+  <p style="margin-bottom: 0;"><b>Недостатки:</b></p>
+  {{review.minus|linebreaks}}
+  {% endif %}
+  {% if review.text %}
+  <p style="margin-bottom: 0;"><b>Комментарий:</b></p>
+  {{review.text|linebreaks}}
+  {% endif %}
+  </div>
+  <hr style="width: 100%;">
+  {% endfor %}
+</div>
+
+{% endblock %}

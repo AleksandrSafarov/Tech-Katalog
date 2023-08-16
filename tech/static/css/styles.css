@@ -166,6 +166,20 @@ li.rating-element{
     margin-left:1%;
 }
 
+div.review-in-product-page{
+    word-wrap: break-word;
+    width: 50%;
+}
+
 div.make-review{
-    width: 35%;
+    width: 50%;
+}
+
+.rText{
+    margin-left: 2%;
+}
+
+div.review{
+    word-wrap: break-word;
+    width: 100%;
 }
