@@ -1,6 +1,6 @@
 {% extends 'base/base.html' %}
 {% load static %}
-{% load productTag %}
+{% load favoritesTag %}
 
 {% block title %}Tech-Katalog{% endblock %}
 
@@ -20,23 +20,35 @@
       <p>
         {% if reviews %}
         <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
-        <span id="boot-icon" class="bi {% if avgRating > 1.75 %}bi-star-fill{% elif avgRating > 1.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
-        <span id="boot-icon" class="bi {% if avgRating > 2.75 %}bi-star-fill{% elif avgRating > 2.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
-        <span id="boot-icon" class="bi {% if avgRating > 3.75 %}bi-star-fill{% elif avgRating > 3.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
-        <span id="boot-icon" class="bi {% if avgRating > 4.75 %}bi-star-fill{% elif avgRating > 4.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span> 
+        <span id="boot-icon" class="bi {% if avgRating > 1.8 %}bi-star-fill{% elif avgRating > 1.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 2.8 %}bi-star-fill{% elif avgRating > 2.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 3.8 %}bi-star-fill{% elif avgRating > 3.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 4.8 %}bi-star-fill{% elif avgRating > 4.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span> 
         <span: style="color: black;"> {{ avgRating }} | Оценок: {{ reviewsCount }}</span>
         {% else %}
         <p style="color: gray;">Нет оценок</p>
         {% endif %}
       </p>
+      <a href="{% url 'favorite' product.id %}">
+        {% if user.is_authenticated %}
+            {% isFavorite product.id user.id as productIsFavorite %}
+            {% if productIsFavorite %}
+            <button class="favorite-button"><span id="boot-icon" class="bi bi-heart-fill" style="font-size:1.3rem"></span></button>
+            {% else %}
+            <button class="favorite-button"><span id="boot-icon" class="bi bi-heart" style="font-size:1.3rem"></span></button>
+            {% endif %}
+        {% else %}
+        <button class="favorite-button"><span id="boot-icon" class="bi bi-heart" style="font-size:1.3rem"></span></button>
+        {% endif %}
+    </a>
       </p>
-      <img src="{{ product.main_image.url }}" class="product-image">
+      <img src="{{ product.main_image.url }}" class="product-image-seller">
       {% if images %}
       <hr class="image-line">
       <p>Дополнительные избражения</p>
       {% endif %}
       {% for image in images %}
-      <img src="{{ image.image.url }}" class="product-image" style="margin-bottom: 1%;">
+      <img src="{{ image.image.url }}" class="product-image-seller" style="margin-bottom: 1%;">
       <form action="{% url 'deleteImage' product.id image.id %}">
       <button type="submit" class="btn btn-outline-danger"><span class="bi bi-trash" style="color: rgb(255, 0, 0);"></span> Удалить изображение</button>
     </form>
@@ -49,16 +61,16 @@
       {% if not discount %}
       <h2>{{ product.price }} ₽</h2>
       {% else %}
-      <span class="product-page-price-discount">{% getPriceWithDiscount product.price discount.value %} ₽</span> <span class="discount"><b> -{{ discount.value }}%</b></span>
+      <span class="product-page-price-discount">{{ product.getPriceWithDiscount}} ₽</span> <span class="discount"><b> -{{ discount.value }}%</b></span>
       <p style="margin-bottom: 0; font-size: smaller;"><s>{{ product.price }} ₽</s>.<br>Скидка действует до {{ discount.getdate }}.</p>
       {% endif %}
       {% if product.stock %}
-      <p>Количество: {{ product.stock }} шт.</p>
+      <p style="font-size: medium; margin-bottom: 0;">Количество: {{ product.stock }} шт.</p>
       {% else %}
       <p>Нет в наличии</p>
       {% endif %}
       <hr style="visibility: hidden; margin-top: 0; margin-bottom: 0;">
-      <p>Это Ваш товар. <a href="{% url 'productManagement' %}" class="link-dark">Профиль продавца</a></p>
+      <p style="font-size: medium;">Это Ваш товар. <a href="{% url 'productManagement' %}" class="link-dark">Профиль продавца</a></p>
       <a href="{% url 'newData' product.id path %}" class="text-decoration-none">
         <button class="btn btn-primary">Изменить данные</button>
       </a>
@@ -78,15 +90,27 @@
       <p>
         {% if reviews %}
         <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
-        <span id="boot-icon" class="bi {% if avgRating > 1.75 %}bi-star-fill{% elif avgRating > 1.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
-        <span id="boot-icon" class="bi {% if avgRating > 2.75 %}bi-star-fill{% elif avgRating > 2.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
-        <span id="boot-icon" class="bi {% if avgRating > 3.75 %}bi-star-fill{% elif avgRating > 3.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
-        <span id="boot-icon" class="bi {% if avgRating > 4.75 %}bi-star-fill{% elif avgRating > 4.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span> 
+        <span id="boot-icon" class="bi {% if avgRating > 1.8 %}bi-star-fill{% elif avgRating > 1.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 2.8 %}bi-star-fill{% elif avgRating > 2.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 3.8 %}bi-star-fill{% elif avgRating > 3.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 4.8 %}bi-star-fill{% elif avgRating > 4.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span> 
         <span: style="color: black;"> {{ avgRating }} | Оценок: {{ reviewsCount }}</span>
         {% else %}
         <p style="color: gray;">Нет оценок</p>
         {% endif %}
       </p>
+      <a href="{% url 'favorite' product.id %}">
+        {% if user.is_authenticated %}
+            {% isFavorite product.id user.id as productIsFavorite %}
+            {% if productIsFavorite %}
+            <button class="favorite-button"><span id="boot-icon" class="bi bi-heart-fill" style="font-size:1.3rem"></span></button>
+            {% else %}
+            <button class="favorite-button"><span id="boot-icon" class="bi bi-heart" style="font-size:1.3rem"></span></button>
+            {% endif %}
+        {% else %}
+        <button class="favorite-button"><span id="boot-icon" class="bi bi-heart" style="font-size:1.3rem"></span></button>
+        {% endif %}
+    </a>
         <div  style="width:500px; height:500px; margin-top: 5%; margin-left: -1%; align-items: center;">
         {% if images %}
         <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
@@ -122,19 +146,19 @@
         {% if not discount %}
         <h2>{{ product.price }} ₽</h2>
         {% else %}
-        <span class="product-page-price-discount">{% getPriceWithDiscount product.price discount.value %} ₽</span> <span class="discount"><b> -{{ discount.value }}%</b></span>
+        <span class="product-page-price-discount">{{ product.getPriceWithDiscount}} ₽</span> <span class="discount"><b> -{{ discount.value }}%</b></span>
         <p style="margin-bottom: 0; font-size: smaller;"><s>{{ product.price }} ₽</s>.<br>Скидка действует до {{ discount.getdate }}.</p>
         {% endif %}
         {% if product.stock %}
-        <p>Количество: {{ product.stock }} шт.</p>
+        <p style="font-size: medium; margin-bottom: 0;">Количество: {{ product.stock }} шт.</p>
+        <p style="font-size: medium;">Продавец: <a href="{% url 'seller' seller.id %}" class="link-dark">{{ seller }}</a></p>
         <a href="#">
-          <button class="btn btn-danger">Добавить в корзину</button>
+          <button class="btn btn-danger">В корзину</button>
         </a>
         {% else %}
-        <p>Нет в наличии</p>
+        <p style="font-size: medium; margin-bottom: 0;">Нет в наличии</p>
         {% endif %}
         <hr style="visibility: hidden;">
-        <p>Продавец: <a href="{% url 'seller' seller.id %}" class="link-dark">{{ seller }}</a></p>
       </div>
   {% endif %}
   </div>
@@ -269,10 +293,10 @@
   <h3>Оценки и отзывы на товар</h3>
   <h3>{{ avgRating }} 
     <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
-    <span id="boot-icon" class="bi {% if avgRating > 1.7 %}bi-star-fill{% elif avgRating > 1.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
-    <span id="boot-icon" class="bi {% if avgRating > 2.7 %}bi-star-fill{% elif avgRating > 2.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
-    <span id="boot-icon" class="bi {% if avgRating > 3.7 %}bi-star-fill{% elif avgRating > 3.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
-    <span id="boot-icon" class="bi {% if avgRating > 4.7 %}bi-star-fill{% elif avgRating > 4.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+    <span id="boot-icon" class="bi {% if avgRating > 1.8 %}bi-star-fill{% elif avgRating > 1.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+    <span id="boot-icon" class="bi {% if avgRating > 2.8 %}bi-star-fill{% elif avgRating > 2.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+    <span id="boot-icon" class="bi {% if avgRating > 3.8 %}bi-star-fill{% elif avgRating > 3.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+    <span id="boot-icon" class="bi {% if avgRating > 4.8 %}bi-star-fill{% elif avgRating > 4.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
   </h3>
   
   {% if reviewsWithoutUser %}

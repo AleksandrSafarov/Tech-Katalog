@@ -6,6 +6,7 @@ from django.utils import timezone
 import datetime
 
 from sellers.models import Seller
+from buyers.models import *
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -33,6 +34,42 @@ class Product(models.Model):
         if self.stock:
             return self.stock
         return 'Нет в наличии'
+    
+    def getAvgProductRating(self):
+        reviews = list(ProductRating.objects.filter(product=self))
+        if len(reviews) == 0:
+            return 0
+        avgRating = round(sum(r.value for r in reviews) / len(reviews), 2)
+        if avgRating % 1 == 0:
+            return int(avgRating)
+        return avgRating
+    
+    def getProductRatingCount(self):
+        return len(list(ProductRating.objects.filter(product=self)))
+    
+    def hasDiscount(self):
+        try:
+            discount = Discount.objects.get(product=self)
+        except:
+            return False
+        return True
+    
+    def getDiscountValue(self):
+        try:
+            discount = Discount.objects.get(product=self)
+        except:
+            return 0
+        return discount.value
+    
+    def getPriceWithDiscount(self):
+        try:
+            discount = Discount.objects.get(product=self)
+        except:
+            return self.price
+        priceWithDiscount = int(self.price * (1 - (discount.value / 100)))
+        if priceWithDiscount == 0:
+            return 1
+        return priceWithDiscount
 
 class ProductImage(models.Model):
     image = models.ImageField(upload_to='images/products/')

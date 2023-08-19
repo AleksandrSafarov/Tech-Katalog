@@ -2,4 +2,6 @@ from django.urls import path
 
 from .views import *
 
-urlpatterns = []
+urlpatterns = [
+    path('favorite/<int:product_id>', favoriteFunc, name='favorite')
+]

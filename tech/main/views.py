@@ -14,6 +14,8 @@ from .models import *
 
 import datetime
 
+from django.core.paginator import Paginator
+
 class Index(TemplateView):
     template_name = 'main/index.html'
 
@@ -27,13 +29,20 @@ class Index(TemplateView):
     
 
 def categoryPage(request, category_id):
-    category = Category.objects.get(id=category_id)
-    products = list(Product.objects.filter(category=category))
-    context={
-        'products':products,
-    }
+    try:
+        category = Category.objects.get(id=category_id)
+    except:
+        raise Http404
+    products = Product.objects.filter(category=category)
+    paginator = Paginator(products, 3)
 
-    return render(request, 'main/categoryPage.html', context=context)
+    page_number = request.GET.get("page")
+    page_objects = paginator.get_page(page_number)
+    context={
+        'page_objects':page_objects,
+        'category': category,
+    }
+    return render(request, "main/categoryPage.html", context=context)
 
 def allProductsPage(request):
     products = list(Product.objects.all())
@@ -61,12 +70,7 @@ def productPage(request, product_id):
         productRating = False
     allReviews = list(ProductRating.objects.filter(product=product))
     reviewsCount = len(allReviews)
-    try:
-        avgRating = round(sum(r.value for r in allReviews) / len(allReviews), 2)
-    except:
-        avgRating = 0
-    if avgRating % 1 == 0:
-        avgRating = int(avgRating)
+    avgRating = product.getAvgProductRating()
     if request.user.is_authenticated:
         revs = list(ProductRating.objects.filter(product=product).exclude(user=request.user))
     else:
@@ -76,12 +80,12 @@ def productPage(request, product_id):
     for r in revs:
         if r.text or r.plus or r.minus:
             reviewsWithoutUser.append(r)
-        if len(reviewsWithoutUser) == 3:
-            break
     reviewsWithTextCount = len(reviewsWithoutUser)
     if productRating:
         if productRating.text or productRating.plus or productRating.minus:
             reviewsWithTextCount += 1
+    if len(reviewsWithoutUser) > 3:
+        reviewsWithoutUser = reviewsWithoutUser[:3]
     context={
         'product': product,
         'images': images,
@@ -160,12 +164,23 @@ def productReviewsPage(request, product_id, sort_key):
     if avgRating % 1 == 0:
         avgRating = int(avgRating)
     if request.user.is_authenticated:
-        reviewsWithoutUser = list(ProductRating.objects.filter(product=product).exclude(user=request.user))
+        revs = list(ProductRating.objects.filter(product=product).exclude(user=request.user))
     else:
-        reviewsWithoutUser = list(ProductRating.objects.filter(product=product))
-    reviewsWithoutUser.sort(key=lambda x: x.date, reverse=True)
-    if len(reviewsWithoutUser) < 3:
+        revs = list(ProductRating.objects.filter(product=product))
+    if len(revs) < 3:
         raise Http404
+    if sort_key == 1: 
+        revs.sort(key=lambda x: x.date, reverse=True)
+    elif sort_key == 2:
+        revs.sort(key=lambda x: x.date, reverse=False)
+    elif sort_key == 3:
+        revs.sort(key=lambda x: x.value, reverse=False)
+    elif sort_key == 4:
+        revs.sort(key=lambda x: x.value, reverse=True)
+    reviewsWithoutUser = []
+    for r in revs:
+        if r.text or r.plus or r.minus:
+            reviewsWithoutUser.append(r)
     reviewsWithTextCount = len(reviewsWithoutUser)
     if productRating:
         if productRating.text or productRating.plus or productRating.minus:
@@ -178,6 +193,7 @@ def productReviewsPage(request, product_id, sort_key):
         'avgRating': avgRating,
         'reviewsWithoutUser': reviewsWithoutUser,
         'reviewsWithTextCount': reviewsWithTextCount,
+        'sortKey': sort_key,
     }
 
     return render(request, 'main/productReviewsPage.html', context=context)

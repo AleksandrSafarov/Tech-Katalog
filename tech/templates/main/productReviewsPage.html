@@ -12,10 +12,10 @@
     <h3 class="product-title">{{ product.name }}</h3>
     <p>
         <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
-        <span id="boot-icon" class="bi {% if avgRating > 1.75 %}bi-star-fill{% elif avgRating > 1.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
-        <span id="boot-icon" class="bi {% if avgRating > 2.75 %}bi-star-fill{% elif avgRating > 2.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
-        <span id="boot-icon" class="bi {% if avgRating > 3.75 %}bi-star-fill{% elif avgRating > 3.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
-        <span id="boot-icon" class="bi {% if avgRating > 4.75 %}bi-star-fill{% elif avgRating > 4.25 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span> 
+        <span id="boot-icon" class="bi {% if avgRating > 1.8 %}bi-star-fill{% elif avgRating > 1.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 2.8 %}bi-star-fill{% elif avgRating > 2.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 3.8 %}bi-star-fill{% elif avgRating > 3.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+        <span id="boot-icon" class="bi {% if avgRating > 4.8 %}bi-star-fill{% elif avgRating > 4.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span> 
         <span: style="color: black;"> {{ avgRating }}</span>
     </p>
     <p>Оценок: {{ reviewsCount }} | Отзывов: {{ reviewsWithTextCount }}</p>
@@ -25,14 +25,35 @@
     <ul class="rating-list">
         <li class="rating-element">
             <p>по дате:</p>
-            <p>по возрастанию | по убыванию</p>
+            <p>
+                {% if sortKey == 1 %}
+                <b style="text-decoration: underline;">сначала новые</b>
+                {% else %}
+                <a href="{% url 'productReviews' product.id 1 %}">сначала новые</a>
+                {% endif %} | 
+                {% if sortKey == 2 %}
+                <b style="text-decoration: underline;">сначала давние</b>
+                {% else %}
+                <a href="{% url 'productReviews' product.id 2 %}">сначала давние</a>
+                {% endif %}</p>
         </li>
         <li class="rating-element">
             <div class="vertical" style="height: 70px;"></div>
         </li>
         <li class="rating-element">
             <p>по оценке:</p>
-            <p>по возрастанию | по убыванию</p>
+            <p>
+                {% if sortKey == 3 %}
+                <b style="text-decoration: underline;">по возрастанию</b>
+                {% else %}
+                <a href="{% url 'productReviews' product.id 3 %}">по возрастанию</a>
+                {% endif %} | 
+                {% if sortKey == 4 %}
+                <b style="text-decoration: underline;">по убыванию</b>
+                {% else %}
+                <a href="{% url 'productReviews' product.id 4 %}">по убыванию</a>
+                {% endif %}</p>
+            </p>
         </li>
         </ul>
     {% for review in reviewsWithoutUser %}

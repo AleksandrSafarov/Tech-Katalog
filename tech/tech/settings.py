@@ -55,8 +55,7 @@ TEMPLATES = [
             ],
         'libraries':{
             'sellersTag': 'sellers.templatetags.sellersTag',
-            'productTag': 'main.templatetags.productTag'
-            
+            'favoritesTag': 'main.templatetags.favoritesTag',
             }
         },
     },

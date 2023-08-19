@@ -7,6 +7,7 @@ from tech import settings
 urlpatterns = [
     path('', include('main.urls')),
     path('', include('sellers.urls')),
+    path('', include('buyers.urls')),
     path('admin/', admin.site.urls, name='admin'),
 ]
 

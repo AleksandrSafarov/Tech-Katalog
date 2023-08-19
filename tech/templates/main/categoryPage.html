@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load favoritesTag %}
 
 {% block title %}Tech-Katalog{% endblock %}
 
@@ -9,11 +10,94 @@
 {% block content %}
 
 <div class="container">
-        {% for product in products %}
-        <p>
-            <a href="{% url 'product' product.id %}" class="">{{ product.name }}</a>
-        </p>
-        {% endfor %}
+    <h2>{{ category.plural_name }}</h2>
+    <hr>
+    <div class="product-list">
+    {% for product in page_objects %}
+    <div class="product-item">
+    <div class="product-item-info-and-image">
+    <div class="product-item-image">
+        <img src="{{ product.main_image.url }}" class="product-list-image">
+    </div>
+    <div class="product-item-info">
+        <a href="{% url 'product' product.id %}" class="link-dark">
+            {{ product.name }}
+        </a>
+        <div class="product-list-item-info">
+            <div>
+                {% if product.getProductRatingCount %}
+                <p style="margin-bottom: 0; font-size: medium;">
+                    <span id="boot-icon" class="bi bi-star-fill" style="font-size: 0.8rem; color: rgb(255, 210, 48);"></span>
+                    <span id="boot-icon" class="bi {% if product.getAvgProductRating > 1.8 %}bi-star-fill{% elif product.getAvgProductRating > 1.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 0.8rem; color: rgb(255, 210, 48);"></span>
+                    <span id="boot-icon" class="bi {% if product.getAvgProductRating > 2.8 %}bi-star-fill{% elif product.getAvgProductRating > 2.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 0.8rem; color: rgb(255, 210, 48);"></span>
+                    <span id="boot-icon" class="bi {% if product.getAvgProductRating > 3.8 %}bi-star-fill{% elif product.getAvgProductRating > 3.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 0.8rem; color: rgb(255, 210, 48);"></span>
+                    <span id="boot-icon" class="bi {% if product.getAvgProductRating > 4.8 %}bi-star-fill{% elif product.getAvgProductRating > 4.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 0.8rem; color: rgb(255, 210, 48);"></span>
+                    <span style="color:grey; margin-left: 10px;">{{ product.getProductRatingCount }}</span>
+                </p>
+                {% else %}
+                <p style="margin-bottom: 0; font-size: medium; color:grey;">Нет оценок</p>
+                {% endif %}
+                <p style="font-size: medium; margin-bottom: 0;">Количество: {{ product.stock }} шт.</p>
+                {% if user == product.seller.user %}
+                <p style="font-size: medium;">Это Ваш товар. <a href="{% url 'productManagement' %}" class="link-dark">Профиль продавца</a></p>
+                {% else %}
+                <p style="font-size: medium;">Продавец: <a href="{% url 'seller' product.seller.id %}" class="link-dark">{{ product.seller }}</a></p>
+                {% endif %}
+                <a href="{% url 'favorite' product.id %}">
+                    {% if user.is_authenticated %}
+                        {% isFavorite product.id user.id as productIsFavorite %}
+                        {% if productIsFavorite %}
+                        <button class="favorite-button"><span id="boot-icon" class="bi bi-heart-fill" style="font-size:1.3rem"></span></button>
+                        {% else %}
+                        <button class="favorite-button"><span id="boot-icon" class="bi bi-heart" style="font-size:1.3rem"></span></button>
+                        {% endif %}
+                    {% else %}
+                    <button class="favorite-button"><span id="boot-icon" class="bi bi-heart" style="font-size:1.3rem"></span></button>
+                    {% endif %}
+                </a>
+            </div>
+            <div>
+                {% if product.hasDiscount %}
+                <h5 style="color: rgb(255, 20, 20);">{{ product.getPriceWithDiscount }} ₽ <s style="font-size:small; color:rgb(107, 107, 107)">{{ product.price }} ₽</s></h5>
+                {% else %}
+                <h5>{{ product.price }} ₽</h5>
+                {% endif %}
+                {% if user != product.seller.user %}
+                <a href="#">
+                <button class="btn btn-danger">В корзину</button></a>
+                {% endif %}
+            </div>
+        </div>
+        
+        </div>
+</div>
+</div>
+<hr>
+    {% endfor %}
+    </div>
+{% if page_objects.paginator.num_pages != 1 %}
+<div class="pagination">
+    <span class="step-links">
+        {% if page_objects.has_previous %}
+        {% if page_objects.previous_page_number != 1 %}
+            <a href="?page=1">&#8810;1</a><span> | </span>
+        {% endif %}
+            <a href="?page={{ page_objects.previous_page_number }}">&#8826;{{ page_objects.previous_page_number }}</a><span> | </span>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ page_objects.number }} из {{ page_objects.paginator.num_pages }}
+        </span>
+
+        {% if page_objects.has_next %}
+            <span> | </span><a href="?page={{ page_objects.next_page_number }}">{{ page_objects.next_page_number }}&#8827;</a>
+            {% if page_objects.paginator.num_pages != page_objects.next_page_number %}
+            <span> | </span><a href="?page={{ page_objects.paginator.num_pages }}">{{ page_objects.paginator.num_pages }}&#8811;</a>
+            {% endif %}
+        {% endif %}
+    </span>
+</div>
+{% endif %}
 </div>
 
 {% endblock %}

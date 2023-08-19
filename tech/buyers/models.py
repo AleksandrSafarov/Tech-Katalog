@@ -40,7 +40,7 @@ class ProductInOrder(models.Model):
     class Meta:
         verbose_name_plural = "Product in order"
 
-class Favourites(models.Model):
+class Favorites(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
@@ -48,4 +48,4 @@ class Favourites(models.Model):
         return self.product + ': ' + self.user
 
     class Meta:
-        verbose_name_plural = "Favourites"
+        verbose_name_plural = "Favorites"

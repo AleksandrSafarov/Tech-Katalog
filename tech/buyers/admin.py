@@ -21,4 +21,4 @@ class FavouritesAdmin(admin.ModelAdmin):
 admin.site.register(ProductInCart, ProductInCartAdmin)
 admin.site.register(SavedAddress, SavedAddressAdmin)
 admin.site.register(ProductInOrder, ProductInOrderAdmin)
-admin.site.register(Favourites, FavouritesAdmin)
+admin.site.register(Favorites, FavouritesAdmin)

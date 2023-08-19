@@ -108,6 +108,13 @@ img.product-image {
   margin-right: auto;
 }
 
+img.product-image-seller {
+    max-width:400px;
+    max-height:400px;
+    min-width: 200px;
+    border-radius: 5px;
+}
+
 a.product-image-link{
     max-width:400px;
     max-height:400px;
@@ -182,4 +189,39 @@ div.make-review{
 div.review{
     word-wrap: break-word;
     width: 100%;
+}
+
+div.product-item-info-and-image{
+    display: grid;
+    align-items: center; 
+    grid-template-columns: 200px 10fr;
+    column-gap: 10px;
+    width: 100%;
+}
+
+div.product-item-info{
+    text-align: left;
+    word-wrap: break-word;
+    width: 43%;
+    font-size: large;
+}
+
+.product-list-image{
+    max-width: 170px;
+    max-height: 170px;
+}
+
+div.product-list-item-info{
+    display: grid;
+    align-items: center;
+    grid-template-columns: 300px 1fr;
+}
+
+.favorite-button{
+    border: rgb(255, 20, 20) solid 1px;
+    border-radius: 7px;
+    color: rgb(255, 20, 20);
+    background-color: white;
+    width: 32px;
+    height: 32px;
 }
