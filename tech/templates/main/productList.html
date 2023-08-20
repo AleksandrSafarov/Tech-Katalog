@@ -1,8 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
-{% load favoritesTag %}
 
-{% block title %}Tech-Katalog{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block extraheader %}
 {% endblock %}
@@ -10,7 +9,55 @@
 {% block content %}
 
 <div class="container">
-    <h2>{{ category.plural_name }}</h2>
+    <h2>{{ title }}</h2>
+    <hr>
+    <p>Сортировать:</p>
+    <ul class="rating-list">
+        <li class="rating-element">
+            <p>
+                {% if sortKey == 1 %}
+                <b style="text-decoration: underline;">сначала новые</b>
+                {% else %}
+                <a href="{% url 'productList' category 1 %}">сначала новые</a>
+                {% endif %}</p>
+        </li>
+        <li class="rating-element">
+            <div class="vertical" style="height: 70px;"></div>
+        </li>
+        <li class="rating-element">
+            <p>по оценке:</p>
+            <p>
+                {% if sortKey == 2 %}
+                <b style="text-decoration: underline;">по возрастанию</b>
+                {% else %}
+                <a href="{% url 'productList' category 2 %}">по возрастанию</a>
+                {% endif %} | 
+                {% if sortKey == 3 %}
+                <b style="text-decoration: underline;">по убыванию</b>
+                {% else %}
+                <a href="{% url 'productList' category 3 %}">по убыванию</a>
+                {% endif %}</p>
+            </p>
+        </li>
+        <li class="rating-element">
+            <div class="vertical" style="height: 70px;"></div>
+        </li>
+        <li class="rating-element">
+            <p>по цене:</p>
+            <p>
+                {% if sortKey == 4 %}
+                <b style="text-decoration: underline;">по возрастанию</b>
+                {% else %}
+                <a href="{% url 'productList' category 4 %}">по возрастанию</a>
+                {% endif %} | 
+                {% if sortKey == 5 %}
+                <b style="text-decoration: underline;">по убыванию</b>
+                {% else %}
+                <a href="{% url 'productList' category 5 %}">по убыванию</a>
+                {% endif %}</p>
+            </p>
+        </li>
+        </ul>
     <hr>
     <div class="product-list">
     {% for product in page_objects %}
@@ -37,24 +84,12 @@
                 {% else %}
                 <p style="margin-bottom: 0; font-size: medium; color:grey;">Нет оценок</p>
                 {% endif %}
-                <p style="font-size: medium; margin-bottom: 0;">Количество: {{ product.stock }} шт.</p>
+                <p style="font-size: medium; margin-bottom: 0;">{% if product.stock != 0 %}Количество: {{ product.stock }} шт.{% else %}Нет в наличии{% endif %}</p>
                 {% if user == product.seller.user %}
                 <p style="font-size: medium;">Это Ваш товар. <a href="{% url 'productManagement' %}" class="link-dark">Профиль продавца</a></p>
                 {% else %}
                 <p style="font-size: medium;">Продавец: <a href="{% url 'seller' product.seller.id %}" class="link-dark">{{ product.seller }}</a></p>
                 {% endif %}
-                <a href="{% url 'favorite' product.id %}">
-                    {% if user.is_authenticated %}
-                        {% isFavorite product.id user.id as productIsFavorite %}
-                        {% if productIsFavorite %}
-                        <button class="favorite-button"><span id="boot-icon" class="bi bi-heart-fill" style="font-size:1.3rem"></span></button>
-                        {% else %}
-                        <button class="favorite-button"><span id="boot-icon" class="bi bi-heart" style="font-size:1.3rem"></span></button>
-                        {% endif %}
-                    {% else %}
-                    <button class="favorite-button"><span id="boot-icon" class="bi bi-heart" style="font-size:1.3rem"></span></button>
-                    {% endif %}
-                </a>
             </div>
             <div>
                 {% if product.hasDiscount %}
@@ -64,7 +99,9 @@
                 {% endif %}
                 {% if user != product.seller.user %}
                 <a href="#">
+                {% if product.stock %}
                 <button class="btn btn-danger">В корзину</button></a>
+                {% endif %}
                 {% endif %}
             </div>
         </div>
