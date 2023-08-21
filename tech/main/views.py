@@ -6,11 +6,13 @@ from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.shortcuts import redirect
 from django.urls.base import reverse_lazy
 from django.views.generic import *
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.db.models import Q
 
 from .forms import *
 from .models import *
+
+from .utils import *
 
 import datetime
 
@@ -33,18 +35,11 @@ def categoryProductList(request, category_id, sort_key):
     except:
         raise Http404
     products = list(Product.objects.filter(category=category))
-    if sort_key == 1:
-        products.sort(key=lambda x: x.id, reverse=True)
-    elif sort_key == 2:
-        products.sort(key=lambda x: x.getAvgProductRating(), reverse=False)
-    elif sort_key == 3:
-        products.sort(key=lambda x: x.getAvgProductRating(), reverse=True)
-    elif sort_key == 4:
-        products.sort(key=lambda x: x.getPriceWithDiscount(), reverse=False)
-    elif sort_key == 5:
-        products.sort(key=lambda x: x.getPriceWithDiscount(), reverse=True)
-
-    paginator = Paginator(products, 10)
+    
+    sortedProducts = productSort(products, sort_key, noStock=request.GET.get('noStock'),
+                                 withDiscount=request.GET.get('withDiscount'), withRating=request.GET.get('withRating'))
+    
+    paginator = Paginator(sortedProducts, 10)
 
     page_number = request.GET.get("page")
     page_objects = paginator.get_page(page_number)
@@ -61,18 +56,11 @@ def categoryProductList(request, category_id, sort_key):
 
 def allProductsList(request, sort_key):
     products = list(Product.objects.all())
-    if sort_key == 1:
-        products.sort(key=lambda x: x.id, reverse=True)
-    elif sort_key == 2:
-        products.sort(key=lambda x: x.getAvgProductRating(), reverse=False)
-    elif sort_key == 3:
-        products.sort(key=lambda x: x.getAvgProductRating(), reverse=True)
-    elif sort_key == 4:
-        products.sort(key=lambda x: x.getPriceWithDiscount(), reverse=False)
-    elif sort_key == 5:
-        products.sort(key=lambda x: x.getPriceWithDiscount(), reverse=True)
+    
+    sortedProducts = productSort(products, sort_key, noStock=request.GET.get('noStock'),
+                                 withDiscount=request.GET.get('withDiscount'), withRating=request.GET.get('withRating'))
 
-    paginator = Paginator(products, 10)
+    paginator = Paginator(sortedProducts, 10)
 
     page_number = request.GET.get("page")
     page_objects = paginator.get_page(page_number)

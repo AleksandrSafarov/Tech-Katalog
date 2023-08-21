@@ -18,7 +18,7 @@
                 {% if sortKey == 1 %}
                 <b style="text-decoration: underline;">сначала новые</b>
                 {% else %}
-                <a href="{% url 'all' 1 %}">сначала новые</a>
+                <a href="{% url 'all' 1 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">сначала новые</a>
                 {% endif %}</p>
         </li>
         <li class="rating-element">
@@ -30,12 +30,31 @@
                 {% if sortKey == 2 %}
                 <b style="text-decoration: underline;">по возрастанию</b>
                 {% else %}
-                <a href="{% url 'all' 2 %}">по возрастанию</a>
+                <a href="{% url 'all' 2 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по возрастанию</a>
                 {% endif %} | 
                 {% if sortKey == 3 %}
                 <b style="text-decoration: underline;">по убыванию</b>
                 {% else %}
-                <a href="{% url 'all' 3 %}">по убыванию</a>
+                <a href="{% url 'all' 3 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по убыванию</a>
+                {% endif %}</p>
+            </p>
+        </li>
+        
+        <li class="rating-element">
+            <div class="vertical" style="height: 70px;"></div>
+        </li>
+        <li class="rating-element">
+            <p>по количеству оценок:</p>
+            <p>
+                {% if sortKey == 4 %}
+                <b style="text-decoration: underline;">по возрастанию</b>
+                {% else %}
+                <a href="{% url 'all' 4 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по возрастанию</a>
+                {% endif %} | 
+                {% if sortKey == 5 %}
+                <b style="text-decoration: underline;">по убыванию</b>
+                {% else %}
+                <a href="{% url 'all' 5 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по убыванию</a>
                 {% endif %}</p>
             </p>
         </li>
@@ -45,19 +64,69 @@
         <li class="rating-element">
             <p>по цене:</p>
             <p>
-                {% if sortKey == 4 %}
+                {% if sortKey == 6 %}
                 <b style="text-decoration: underline;">по возрастанию</b>
                 {% else %}
-                <a href="{% url 'all' 4 %}">по возрастанию</a>
+                <a href="{% url 'all' 6 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по возрастанию</a>
                 {% endif %} | 
-                {% if sortKey == 5 %}
+                {% if sortKey == 7 %}
                 <b style="text-decoration: underline;">по убыванию</b>
                 {% else %}
-                <a href="{% url 'all' 5 %}">по убыванию</a>
+                <a href="{% url 'all' 7 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по убыванию</a>
                 {% endif %}</p>
             </p>
         </li>
         </ul>
+    <hr>
+    <p>Фильтры:</p>
+    <form action="{% url 'all' sortKey %}">
+    <ul class="rating-list">
+        <li class="rating-element">
+            <p>
+                {% if request.GET.noStock %}
+                <input type="checkbox" name="noStock" checked>
+                {% else %}
+                <input type="checkbox" name="noStock">
+                {% endif %}
+                <label>Только в наличии</label>
+            </p>
+        </li>
+        <li class="rating-element">
+            <div class="vertical" style="height: 30px;"></div>
+        </li>
+        <li class="rating-element">
+            <p>
+                {% if request.GET.withDiscount %}
+                <input type="checkbox" name="withDiscount" checked>
+                {% else %}
+                <input type="checkbox" name="withDiscount">
+                {% endif %}
+                <label>Только со скидкой</label>
+            </p>
+        </li>
+        <li class="rating-element">
+            <div class="vertical" style="height: 30px;"></div>
+        </li>
+        <li class="rating-element">
+            <p>
+                {% if request.GET.withRating %}
+                <input type="checkbox" name="withRating" checked>
+                {% else %}
+                <input type="checkbox" name="withRating">
+                {% endif %}
+                <label>Только с оценками</label>
+            </p>
+        </li>
+        <li class="rating-element">
+            <div class="vertical" style="height: 30px;"></div>
+        </li>
+        <li class="rating-element">
+            <p>
+                <input type="submit" class="btn btn-outline-dark" value="Применить">
+            </p>
+        </li>
+        </ul>
+    </form>
     <hr>
     <div class="product-list">
     {% for product in page_objects %}
