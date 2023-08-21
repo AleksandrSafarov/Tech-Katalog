@@ -27,15 +27,12 @@ class Index(TemplateView):
         context["categories"] = categories
         return context
     
-def productList(request, category_id, sort_key):
-    if category_id != 0:
-        try:
-            category = Category.objects.get(id=category_id)
-        except:
-            raise Http404
-        products = list(Product.objects.filter(category=category))
-    else:
-        products = list(Product.objects.all())
+def categoryProductList(request, category_id, sort_key):
+    try:
+        category = Category.objects.get(id=category_id)
+    except:
+        raise Http404
+    products = list(Product.objects.filter(category=category))
     if sort_key == 1:
         products.sort(key=lambda x: x.id, reverse=True)
     elif sort_key == 2:
@@ -52,26 +49,42 @@ def productList(request, category_id, sort_key):
     page_number = request.GET.get("page")
     page_objects = paginator.get_page(page_number)
     
-    if category_id == 0:
-        title = 'Все товары'
-    else:
-        title = category.plural_name
+    title = category.plural_name
 
     context={
         'title': title,
         'page_objects':page_objects,
         'category': category_id,
+        'sortKey': sort_key
     }
-    return render(request, "main/productList.html", context=context)
+    return render(request, "main/categoryProductList.html", context=context)
 
-def allProductsPage(request, sort_key):
+def allProductsList(request, sort_key):
     products = list(Product.objects.all())
+    if sort_key == 1:
+        products.sort(key=lambda x: x.id, reverse=True)
+    elif sort_key == 2:
+        products.sort(key=lambda x: x.getAvgProductRating(), reverse=False)
+    elif sort_key == 3:
+        products.sort(key=lambda x: x.getAvgProductRating(), reverse=True)
+    elif sort_key == 4:
+        products.sort(key=lambda x: x.getPriceWithDiscount(), reverse=False)
+    elif sort_key == 5:
+        products.sort(key=lambda x: x.getPriceWithDiscount(), reverse=True)
+
+    paginator = Paginator(products, 10)
+
+    page_number = request.GET.get("page")
+    page_objects = paginator.get_page(page_number)
+    
+    title = 'Все товары'
 
     context={
-        'products':products,
+        'title': title,
+        'page_objects':page_objects,
+        'sortKey': sort_key,
     }
-
-    return render(request, 'main/allProductsPage.html', context=context)
+    return render(request, "main/productList.html", context=context)
 
 def productPage(request, product_id):
     try:

@@ -4,8 +4,8 @@ from .views import *
 
 urlpatterns = [
     path('', Index.as_view(), name='index'),
-    path('productList/<int:category_id>/<int:sort_key>', productList, name='productList'),
-    path('all/<int:sort_key>', allProductsPage, name='all'),
+    path('category/<int:category_id>/<int:sort_key>', categoryProductList, name='category'),
+    path('all/<int:sort_key>', allProductsList, name='all'),
     path('product/<int:product_id>', productPage, name='product'),
     path('product/makeProductReview/<int:product_id>', makeProductReview, name='makeProductReview'),
     path('logout/', logout_user, name='logout'),

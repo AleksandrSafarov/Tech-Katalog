@@ -11,11 +11,11 @@
 <div class="container">
     <div class="wrapper">
         {% for category in categories %}
-        <a href="{% url 'productList' category.id 1 %}" class="text-decoration-none">
+        <a href="{% url 'category' category.id 1 %}" class="text-decoration-none">
             <div class="box">{{ category.plural_name }}</div>
         </a>
         {% endfor %}
-        <a href="{% url 'productList' 0 1 %}" class="text-decoration-none">
+        <a href="{% url 'all' 1 %}" class="text-decoration-none">
             <div class="box">Все товары</div>
         </a>
     </div>

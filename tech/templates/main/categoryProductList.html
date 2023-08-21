@@ -18,7 +18,7 @@
                 {% if sortKey == 1 %}
                 <b style="text-decoration: underline;">сначала новые</b>
                 {% else %}
-                <a href="{% url 'all' 1 %}">сначала новые</a>
+                <a href="{% url 'category' category 1 %}">сначала новые</a>
                 {% endif %}</p>
         </li>
         <li class="rating-element">
@@ -30,12 +30,12 @@
                 {% if sortKey == 2 %}
                 <b style="text-decoration: underline;">по возрастанию</b>
                 {% else %}
-                <a href="{% url 'all' 2 %}">по возрастанию</a>
+                <a href="{% url 'category' category 2 %}">по возрастанию</a>
                 {% endif %} | 
                 {% if sortKey == 3 %}
                 <b style="text-decoration: underline;">по убыванию</b>
                 {% else %}
-                <a href="{% url 'all' 3 %}">по убыванию</a>
+                <a href="{% url 'category' category 3 %}">по убыванию</a>
                 {% endif %}</p>
             </p>
         </li>
@@ -48,12 +48,12 @@
                 {% if sortKey == 4 %}
                 <b style="text-decoration: underline;">по возрастанию</b>
                 {% else %}
-                <a href="{% url 'all' 4 %}">по возрастанию</a>
+                <a href="{% url 'category' category 4 %}">по возрастанию</a>
                 {% endif %} | 
                 {% if sortKey == 5 %}
                 <b style="text-decoration: underline;">по убыванию</b>
                 {% else %}
-                <a href="{% url 'all' 5 %}">по убыванию</a>
+                <a href="{% url 'category' category 5 %}">по убыванию</a>
                 {% endif %}</p>
             </p>
         </li>
