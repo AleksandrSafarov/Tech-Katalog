@@ -59,7 +59,7 @@
         </li>
         </ul>
         <hr>
-    {% for review in reviewsWithoutUser %}
+    {% for review in page_objects %}
   <div class="review">
     <b>{{ review.user }}</b>
     <br>
@@ -88,6 +88,31 @@
   </div>
   <hr style="width: 100%;">
   {% endfor %}
+
+  {% if page_objects.paginator.num_pages != 1 %}
+<div class="pagination">
+    <span class="step-links">
+        {% if page_objects.has_previous %}
+        {% if page_objects.previous_page_number != 1 %}
+            <a href="?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}page=1">&#8810;1</a><span> | </span>
+        {% endif %}
+            <a href="?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}page={{ page_objects.previous_page_number }}">&#8826;{{ page_objects.previous_page_number }}</a><span> | </span>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ page_objects.number }} из {{ page_objects.paginator.num_pages }}
+        </span>
+
+        {% if page_objects.has_next %}
+            <span> | </span><a href="?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}page={{ page_objects.next_page_number }}">{{ page_objects.next_page_number }}&#8827;</a>
+            {% if page_objects.paginator.num_pages != page_objects.next_page_number %}
+            <span> | </span><a href="?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}page={{ page_objects.paginator.num_pages }}">{{ page_objects.paginator.num_pages }}&#8811;</a>
+            {% endif %}
+        {% endif %}
+    </span>
+</div>
+
+{% endif %}
 </div>
 
 {% endblock %}

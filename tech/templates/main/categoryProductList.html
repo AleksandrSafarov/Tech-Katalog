@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load productInCartTag %}
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -168,9 +169,19 @@
                 <h5>{{ product.price }} ₽</h5>
                 {% endif %}
                 {% if user != product.seller.user %}
-                <a href="#">
                 {% if product.stock %}
-                <button class="btn btn-danger">В корзину</button></a>
+                {% isProductInCart product.id user.id as productInCart %}
+                    {% if productInCart %}
+                    {% getProductInCartCount product.id user.id as productInCartCount %}
+                    {% if productInCartCount %}
+                    <p style="font-size: large;"><a href="{% url 'minusProductInCart' product.id %}" class="cart-count-symbol"><b>-</b></a> | {{productInCartCount}} | 
+                      {% if product.stock > productInCartCount %}<a href="{% url 'plusProductInCart' product.id %}" class="cart-count-symbol"><b>+</b></a>{% endif %}</p>
+                    {% endif %}
+                    {% else %}
+                    <a href="{% url 'addToCart' product.id %}">
+                      <button class="btn btn-danger">В корзину</button>
+                    </a>
+                    {% endif %}
                 {% endif %}
                 {% endif %}
             </div>

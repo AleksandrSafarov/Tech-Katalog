@@ -1,6 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% load favoritesTag %}
+{% load productInCartTag %}
 
 {% block title %}{{ product.name }} - Tech-Katalog{% endblock %}
 
@@ -152,9 +153,18 @@
         {% if product.stock %}
         <p style="font-size: medium; margin-bottom: 0;">Количество: {{ product.stock }} шт.</p>
         <p style="font-size: medium;">Продавец: <a href="{% url 'seller' seller.id %}" class="link-dark">{{ seller }}</a></p>
-        <a href="#">
+        {% isProductInCart product.id user.id as productInCart %}
+        {% if productInCart %}
+        {% getProductInCartCount product.id user.id as productInCartCount %}
+        {% if productInCartCount %}
+        <p style="font-size: x-large;"><a href="{% url 'minusProductInCart' product.id %}" class="cart-count-symbol"><b>-</b></a> | {{productInCartCount}} | 
+          {% if product.stock > productInCartCount %}<a href="{% url 'plusProductInCart' product.id %}" class="cart-count-symbol"><b>+</b></a>{% endif %}</p>
+        {% endif %}
+        {% else %}
+        <a href="{% url 'addToCart' product.id %}">
           <button class="btn btn-danger">В корзину</button>
         </a>
+        {% endif %}
         {% else %}
         <p style="font-size: medium; margin-bottom: 0;">Нет в наличии</p>
         {% endif %}

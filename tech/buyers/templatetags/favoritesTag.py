@@ -1,8 +1,8 @@
 from django import template
 from django.contrib.auth.models import User
 
-from ..models import *
-from buyers.models import Favorites
+from main.models import Product
+from ..models import Favorites
 
 register = template.Library()
 

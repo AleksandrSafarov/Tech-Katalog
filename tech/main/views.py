@@ -208,10 +208,15 @@ def productReviewsPage(request, product_id, sort_key):
     if productRating:
         if productRating.text or productRating.plus or productRating.minus:
             reviewsWithTextCount += 1
+
+    paginator = Paginator(reviewsWithoutUser, 1)
+
+    page_number = request.GET.get("page")
+    page_objects = paginator.get_page(page_number)
     context={
         'product': product,
         'productRating': productRating,
-        'reviews': allReviews,
+        'page_objects': page_objects,
         'reviewsCount': reviewsCount,
         'avgRating': avgRating,
         'reviewsWithoutUser': reviewsWithoutUser,
@@ -345,13 +350,19 @@ def sellerReviewsPage(request, seller_id, sort_key):
     if sellerRating:
         if sellerRating.text:
             reviewsWithTextCount += 1
+    
+    paginator = Paginator(reviewsWithoutUser, 1)
+
+    page_number = request.GET.get("page")
+    page_objects = paginator.get_page(page_number)
+
     context={
         'seller': seller,
         'sellerRating': sellerRating,
         'reviews': allReviews,
         'reviewsCount': reviewsCount,
         'avgRating': avgRating,
-        'reviewsWithoutUser': reviewsWithoutUser,
+        'page_objects':page_objects,
         'reviewsWithTextCount': reviewsWithTextCount,
         'sortKey': sort_key,
     }

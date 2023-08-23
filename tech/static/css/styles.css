@@ -150,7 +150,7 @@ div.product-description{
 div.product-description-text{
     font-size: large;
     margin-left: 2%;
-    width: 60%;
+    width: 47%;
     word-wrap: break-word;
 }
 
@@ -222,4 +222,9 @@ div.product-list-item-info{
     background-color: white;
     width: 32px;
     height: 32px;
+}
+
+.cart-count-symbol{
+    text-decoration: none;
+    color: black;
 }
