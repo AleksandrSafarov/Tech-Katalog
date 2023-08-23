@@ -10,20 +10,6 @@ from main.models import *
 
 import datetime
 
-def sellerPage(request, seller_id):
-    try:
-        seller = Seller.objects.get(id=seller_id)
-    except:
-        raise Http404
-    if request.user.is_authenticated:
-        if seller.user.id == request.user.id:
-            return redirect('sellerArea')
-
-    context={
-        'seller':seller,
-    }
-
-    return render(request, 'sellers/sellerPage.html', context=context)
 
 def changeDataPage(request, product_id, previous_url):
     try:

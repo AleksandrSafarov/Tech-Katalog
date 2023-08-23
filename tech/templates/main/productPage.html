@@ -2,7 +2,7 @@
 {% load static %}
 {% load favoritesTag %}
 
-{% block title %}Tech-Katalog{% endblock %}
+{% block title %}{{ product.name }} - Tech-Katalog{% endblock %}
 
 {% block extraheader %}
 {% endblock %}
@@ -163,6 +163,7 @@
   {% endif %}
   </div>
   <div class="product-description">
+    <hr style="width: 50%;">
     <h3>Описание</h3>
     <div class="product-description-text">
     <p>
@@ -172,12 +173,16 @@
     </p>
   </div>
   </div>
-  <hr style="visibility: hidden;">
+  <hr style="width: 50%;">
+  {% if user.is_authenticated %}
   {% if not product.seller.user == user %}
   <div class="make-review">
     {% if productRating %}
     <h3>Изменить отзыв на товар</h3>
     <p>Последний отзыв был оставлен: {{ productRating.getdate }}.</p>
+    {% else %}
+  <h3>Оценить товар</h3>
+    {% endif %}
     <form action="{% url 'makeProductReview' product.id %}" style="margin-left: 2%;">
       <div class="form-group">
         <div class="row">
@@ -207,10 +212,14 @@
           <li class="rating-element"><input type="radio" name="rating" value="4" /> 4 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
           {% endif %}
             <li class="rating-element"><div class="vertical"></div></li>
+            {% if productRating %}
             {% if productRating.value == 5 %}
             <li class="rating-element"><input type="radio" name="rating" value="5" checked="checked" /> 5 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
           {% else %}
           <li class="rating-element"><input type="radio" name="rating" value="5" /> 5 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+          {% endif %}
+          {% else %}
+          <li class="rating-element"><input type="radio" name="rating" value="5" checked/> 5 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
           {% endif %}
           </ul>
         </div>
@@ -242,53 +251,15 @@
 </div>
 </div>
 </div>
-    {% else %}
-  <h3>Оценить товар</h3>
-  <form action="{% url 'makeProductReview' product.id %}" style="margin-left: 2%">
-    <div class="form-group">
-      <ul class="rating-list">
-          <li class="rating-element"><input type="radio" name="rating" value="1" /> 1 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
-          <li class="rating-element"><div class="vertical"></div></li>
-          <li class="rating-element"><input type="radio" name="rating" value="2" /> 2 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li> 
-          <li class="rating-element"><div class="vertical"></div></li>
-          <li class="rating-element"><input type="radio" name="rating" value="3" /> 3 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li> 
-          <li class="rating-element"><div class="vertical"></div></li>
-          <li class="rating-element"><input type="radio" name="rating" value="4" /> 4 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li> 
-          <li class="rating-element"><div class="vertical"></div></li>
-          <li class="rating-element"><input type="radio" name="rating" value="5" checked="checked" /> 5 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li> 
-        </ul>
-          
-      <hr style="visibility: hidden; margin-bottom: 0;">
-      <div class="row">
-        <div class="row">
-          <p>Что понравилось:</p>
-          <textarea class="form-control" name="plusText">{% if productRating and productRating.plus %}{{ productRating.plus }}{% endif %}</textarea>
-        </div>
-        </div>
-        <div class="row">
-          <div class="row">
-            <p>Что не понравилось:</p>
-            <textarea class="form-control" name="minusText">{% if productRating and productRating.minus %}{{ productRating.minus }}{% endif %}</textarea>
-          </div>
-          </div>
-  <div class="row">
-  <div class="row">
-    <p>Комментарий:</p>
-    <textarea class="form-control" name="reviewText">{% if productRating and productRating.text %}{{ productRating.text }}{% endif %}</textarea>
-  </div>
-  </div>
-<div class="row">
-  <div class="row">
-  <input type="submit" value="Отправить" class="btn btn-dark">
-</div>
-</div>
-    </div>
+    </form>
+
 {% endif %}
-  </form>
-</div>
+{% else %}
+<h5><a href="{% url 'login' %}" class="link-dark">Авторизируйтесь</a>, чтобы оставить отзыв.</h5>
+
 {% endif %}
-<hr style="visibility: hidden;">
 <div class="reviews">
+  <hr style="visibility: hidden;">
   {% if reviews %}
   <h3>Оценки и отзывы на товар</h3>
   <h3>{{ avgRating }} 
@@ -332,9 +303,11 @@
   </div>
   <hr style="width: 50%;">
   {% endfor %}
+  {% if moreThen3Reviews %}
   <a href="{% url 'productReviews' product.id 1 %}">
     <button style="width: 50%;" class="btn btn-outline-dark">Показать все</button>
   </a>
+  {% endif %}
   {% else %}
   <p>Оценок: {{ reviewsCount }}. Нет отзывов от других пользователей.</p>
   {% endif %}
@@ -348,6 +321,7 @@
     <span id="boot-icon" class="bi bi-star" style="font-size: 1rem; color: grey;"></span>
   {% endif %}
 </div>
+
 </div>
 
 {% endblock %}

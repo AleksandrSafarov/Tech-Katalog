@@ -12,6 +12,18 @@
         <div class="seller-info-and-image">
                 <div class="seller-info-container">
                         <h1>{{ seller.name }}</h1>
+                        <p>
+                          {% if reviews %}
+                          <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+                          <span id="boot-icon" class="bi {% if avgRating > 1.8 %}bi-star-fill{% elif avgRating > 1.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+                          <span id="boot-icon" class="bi {% if avgRating > 2.8 %}bi-star-fill{% elif avgRating > 2.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+                          <span id="boot-icon" class="bi {% if avgRating > 3.8 %}bi-star-fill{% elif avgRating > 3.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+                          <span id="boot-icon" class="bi {% if avgRating > 4.8 %}bi-star-fill{% elif avgRating > 4.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span> 
+                          <span: style="color: black;"> {{ avgRating }} | Оценок: {{ reviewsCount }}</span>
+                          {% else %}
+                          <p style="color: gray;">Нет оценок</p>
+                          {% endif %}
+                        </p>
                         <h4>Юридическая информация</h4>
                         <p>{{ seller.full_name }}</p>
                         <p><b>Адрес:</b> {{ seller.address }}</p>
@@ -29,8 +41,141 @@
                         <a href="{{seller.image.url}}" target="_blank">
                         <img class="seller-image" src="{{ seller.image.url }}">
                 </a>
+                <a href="#" class="text-decoration-none"><button class="btn btn-dark" style="margin-top: 2%;">Товары продавца</button></a>
                 </div>
         </div>
+        <div class="make-review">
+                {% if user.is_authenticated %}
+                {% if not product.seller.user == user %}
+                  <hr>
+                  {% if sellerRating %}
+                  <h3>Изменить отзыв</h3>
+                  <p>Последний отзыв был оставлен: {{ sellerRating.getdate }}.</p>
+                  {% else %}
+                <h3>Оценить</h3>
+                  {% endif %}
+                  <form action="{% url 'makeSellerReview' seller.id %}" style="margin-left: 2%;">
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="row">
+                      <ul class="rating-list">
+                        {% if sellerRating.value == 1 %}
+                          <li class="rating-element"><input type="radio" name="rating" value="1" checked="checked" /> 1 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+                        {% else %}
+                        <li class="rating-element"><input type="radio" name="rating" value="1" /> 1 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+                        {% endif %}
+                          <li class="rating-element"><div class="vertical"></div></li>
+                          {% if sellerRating.value == 2 %}
+                          <li class="rating-element"><input type="radio" name="rating" value="2" checked="checked" /> 2 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+                        {% else %}
+                        <li class="rating-element"><input type="radio" name="rating" value="2" /> 2 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+                        {% endif %}
+                          <li class="rating-element"><div class="vertical"></div></li>
+                          {% if sellerRating.value == 3 %}
+                          <li class="rating-element"><input type="radio" name="rating" value="3" checked="checked" /> 3 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+                        {% else %}
+                        <li class="rating-element"><input type="radio" name="rating" value="3" /> 3 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+                        {% endif %}
+                          <li class="rating-element"><div class="vertical"></div></li>
+                          {% if sellerRating.value == 4 %}
+                          <li class="rating-element"><input type="radio" name="rating" value="4" checked="checked" /> 4 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+                        {% else %}
+                        <li class="rating-element"><input type="radio" name="rating" value="4" /> 4 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+                        {% endif %}
+                          <li class="rating-element"><div class="vertical"></div></li>
+                          {% if sellerRating %}
+                          {% if sellerRating.value == 5 %}
+                          <li class="rating-element"><input type="radio" name="rating" value="5" checked="checked" /> 5 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+                        {% else %}
+                        <li class="rating-element"><input type="radio" name="rating" value="5" /> 5 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+                        {% endif %}
+                        {% else %}
+                        <li class="rating-element"><input type="radio" name="rating" value="5" checked/> 5 <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span></li>
+                        {% endif %}
+                        </ul>
+                      </div>
+                    </div>
+                    <hr style="visibility: hidden; margin-bottom: 0;">
+                <div class="row">
+                <div class="row">
+                  <p>Комментарий:</p>
+                  <textarea class="form-control" name="reviewText">{% if sellerRating.text %}{{ sellerRating.text }}{% endif %}</textarea>
+                </div>
+                </div>
+                
+                
+              <div class="row">
+                <div class="row">
+                <input type="submit" value="Отправить" class="btn btn-dark">
+              </div>
+              </div>
+              </div>
+                  </form>
+              
+              {% endif %}
+              {% else %}
+
+              <h5><a href="{% url 'login' %}" class="link-dark">Авторизируйтесь</a>, чтобы оставить отзыв.</h5>
+              <hr style="visibility: hidden;">
+              {% endif %}
+
+        </div>
+        <div class="reviews">
+          
+        <hr style="visibility: hidden;">
+          {% if reviews %}
+          <h3>Оценки и отзывы</h3>
+          <h3>{{ avgRating }} 
+            <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+            <span id="boot-icon" class="bi {% if avgRating > 1.8 %}bi-star-fill{% elif avgRating > 1.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+            <span id="boot-icon" class="bi {% if avgRating > 2.8 %}bi-star-fill{% elif avgRating > 2.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+            <span id="boot-icon" class="bi {% if avgRating > 3.8 %}bi-star-fill{% elif avgRating > 3.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+            <span id="boot-icon" class="bi {% if avgRating > 4.8 %}bi-star-fill{% elif avgRating > 4.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+          </h3>
+          
+          {% if reviewsWithoutUser %}
+          <p>Оценок: {{ reviewsCount }} | Отзывов: {{ reviewsWithTextCount }}</p>
+          
+          <hr style="width: 50%;">
+          {% for review in reviewsWithoutUser %}
+          <div class="review-in-product-page">
+            <b>{{ review.user }}</b>
+            <br>
+             <span>
+            <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+            <span id="boot-icon" class="bi {% if review.value >= 2 %}bi-star-fill{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+            <span id="boot-icon" class="bi {% if review.value >= 3 %}bi-star-fill{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+            <span id="boot-icon" class="bi {% if review.value >= 4 %}bi-star-fill{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+            <span id="boot-icon" class="bi {% if review.value >= 5 %}bi-star-fill{% else %}bi-star{% endif %}" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
+          </span>
+          <br>
+          <span>Отзыв был оставлен: {{ review.getdate }}</span>
+          <p></p>
+          {% if review.text %}
+          <b>Комментарий:</b>
+          {{review.text|linebreaks|truncatechars:100}}
+          {% endif %}
+          </div>
+          <hr style="width: 50%;">
+          {% endfor %}
+          {% if moreThen3Reviews %}
+          <a href="{% url 'sellerReviews' seller.id 1 %}">
+            <button style="width: 50%;" class="btn btn-outline-dark">Показать все</button>
+          </a>
+          {% endif %}
+          {% else %}
+          <p>Оценок: {{ reviewsCount }}. Нет отзывов от других пользователей.</p>
+          {% endif %}
+        
+          {% else %}
+          <h3>Нет оценок </h3>
+            <span id="boot-icon" class="bi bi-star" style="font-size: 1rem; color: grey;"></span>
+            <span id="boot-icon" class="bi bi-star" style="font-size: 1rem; color: grey;"></span>
+            <span id="boot-icon" class="bi bi-star" style="font-size: 1rem; color: grey;"></span>
+            <span id="boot-icon" class="bi bi-star" style="font-size: 1rem; color: grey;"></span>
+            <span id="boot-icon" class="bi bi-star" style="font-size: 1rem; color: grey;"></span>
+          {% endif %}
+        </div>  
 </div>
 
 {% endblock %}

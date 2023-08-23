@@ -23,10 +23,6 @@ class ProductRatingAdmin(admin.ModelAdmin):
     list_display = ('id', 'value', 'product', 'user')
     list_display_links = ('id', 'value', 'product')
 
-class SellerRatingAdmin(admin.ModelAdmin):
-    list_display = ('id', 'value', 'seller', 'user')
-    list_display_links = ('id', 'value', 'seller')
-
 class RAMValueAdmin(admin.ModelAdmin):
     list_display = ('id', 'value')
     list_display_links = ('id', 'value')
@@ -48,7 +44,6 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductImage, ProductImageAdmin)
 admin.site.register(Discount, DiscountAdmin)
 admin.site.register(ProductRating, ProductRatingAdmin)
-admin.site.register(SellerRating, SellerRatingAdmin)
 admin.site.register(RAMValue, RAMValueAdmin)
 admin.site.register(RAM, RAMAdmin)
 admin.site.register(StorageValue, StorageValueAdmin)

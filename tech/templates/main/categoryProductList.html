@@ -128,6 +128,7 @@
         </ul>
     </form>
     <hr>
+    {% if page_objects %}
     <div class="product-list">
     {% for product in page_objects %}
     <div class="product-item">
@@ -186,9 +187,9 @@
     <span class="step-links">
         {% if page_objects.has_previous %}
         {% if page_objects.previous_page_number != 1 %}
-            <a href="?page=1">&#8810;1</a><span> | </span>
+            <a href="?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}page=1">&#8810;1</a><span> | </span>
         {% endif %}
-            <a href="?page={{ page_objects.previous_page_number }}">&#8826;{{ page_objects.previous_page_number }}</a><span> | </span>
+            <a href="?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}page={{ page_objects.previous_page_number }}">&#8826;{{ page_objects.previous_page_number }}</a><span> | </span>
         {% endif %}
 
         <span class="current">
@@ -196,13 +197,17 @@
         </span>
 
         {% if page_objects.has_next %}
-            <span> | </span><a href="?page={{ page_objects.next_page_number }}">{{ page_objects.next_page_number }}&#8827;</a>
+            <span> | </span><a href="?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}page={{ page_objects.next_page_number }}">{{ page_objects.next_page_number }}&#8827;</a>
             {% if page_objects.paginator.num_pages != page_objects.next_page_number %}
-            <span> | </span><a href="?page={{ page_objects.paginator.num_pages }}">{{ page_objects.paginator.num_pages }}&#8811;</a>
+            <span> | </span><a href="?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}page={{ page_objects.paginator.num_pages }}">{{ page_objects.paginator.num_pages }}&#8811;</a>
             {% endif %}
         {% endif %}
     </span>
 </div>
+
+{% endif %}
+{% else %}
+<h3>Ничего не найдено.</h3>
 {% endif %}
 </div>
 

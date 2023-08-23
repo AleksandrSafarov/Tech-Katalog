@@ -104,16 +104,6 @@ class ProductRating(models.Model):
     def getdate(self):
         return str(self.date.day).zfill(2)+'.'+str(self.date.month).zfill(2)+'.'+str(self.date.year)
 
-class SellerRating(models.Model):
-    value = models.IntegerField(default=1)
-    text = models.TextField(null=True)
-    date = models.DateTimeField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.seller + ': ' + self.user + ': ' + self.date
-
 class Popularity(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     finish_date = models.DateTimeField()

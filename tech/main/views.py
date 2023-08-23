@@ -11,8 +11,9 @@ from django.db.models import Q
 
 from .forms import *
 from .models import *
-
 from .utils import *
+
+from sellers.models import *
 
 import datetime
 
@@ -39,7 +40,7 @@ def categoryProductList(request, category_id, sort_key):
     sortedProducts = productSort(products, sort_key, noStock=request.GET.get('noStock'),
                                  withDiscount=request.GET.get('withDiscount'), withRating=request.GET.get('withRating'))
     
-    paginator = Paginator(sortedProducts, 10)
+    paginator = Paginator(sortedProducts, 1)
 
     page_number = request.GET.get("page")
     page_objects = paginator.get_page(page_number)
@@ -102,6 +103,7 @@ def productPage(request, product_id):
         if r.text or r.plus or r.minus:
             reviewsWithoutUser.append(r)
     reviewsWithTextCount = len(reviewsWithoutUser)
+    reviewsWithTextWithoutUser = reviewsWithTextCount
     if productRating:
         if productRating.text or productRating.plus or productRating.minus:
             reviewsWithTextCount += 1
@@ -118,7 +120,7 @@ def productPage(request, product_id):
         'reviewsCount': reviewsCount,
         'avgRating': avgRating,
         'reviewsWithoutUser': reviewsWithoutUser,
-        'moreThen3Reviews': len(reviewsWithoutUser) > 3,
+        'moreThen3Reviews': reviewsWithTextWithoutUser > 3,
         'reviewsWithTextCount': reviewsWithTextCount,
     }
 
@@ -142,10 +144,10 @@ def makeProductReview(request, product_id):
     if (not request.user.is_authenticated) or request.user == product.seller.user :
         raise Http404
     if len(ProductRating.objects.filter(product=product, user=request.user)):
-        productRatingIsCreated = True
+        productRatingExist = True
     else:
-        productRatingIsCreated = False
-    if productRatingIsCreated:
+        productRatingExist = False
+    if productRatingExist:
         productRating = ProductRating.objects.get(user=request.user, product=product)
         if request.GET.get('rating'):
             productRating.value = int(request.GET.get('rating'))
@@ -219,6 +221,142 @@ def productReviewsPage(request, product_id, sort_key):
 
     return render(request, 'main/productReviewsPage.html', context=context)
 
+
+def sellerPage(request, seller_id):
+    try:
+        seller = Seller.objects.get(id=seller_id)
+    except:
+        raise Http404
+    
+    if request.user.is_authenticated:
+        if seller.user.id == request.user.id:
+            return redirect('sellerArea')
+
+    if request.user.is_authenticated:
+        try:
+            sellerRating = SellerRating.objects.get(user=request.user, seller=seller)
+        except:
+            sellerRating = False
+    else:
+        sellerRating = False
+    avgRating = seller.getAvgSellerRating()
+    ratingCount = seller.getSellerRatingCount()
+    
+    allReviews = list(SellerRating.objects.filter(seller=seller))
+
+    if request.user.is_authenticated:
+        revs = list(SellerRating.objects.filter(seller=seller).exclude(user=request.user))
+    else:
+        revs = list(SellerRating.objects.filter(seller=seller))
+    revs.sort(key=lambda x: x.date, reverse=True)
+    reviewsWithoutUser = []
+    for r in revs:
+        if r.text:
+            reviewsWithoutUser.append(r)
+
+    reviewsWithTextCount = len(reviewsWithoutUser)
+
+    if len(reviewsWithoutUser) > 3:
+        moreThen3 = True
+        reviewsWithoutUser = reviewsWithoutUser[:3]
+    else:
+        moreThen3 = False
+    
+    if sellerRating:
+        if sellerRating.text:
+            reviewsWithTextCount += 1
+    context={
+        'seller':seller,
+        'sellerRating': sellerRating,
+        'avgRating': avgRating,
+        'reviewsCount': ratingCount,
+        'reviews': allReviews,
+        'reviewsWithoutUser': reviewsWithoutUser,
+        'moreThen3Reviews': moreThen3,
+        'reviewsWithTextCount': reviewsWithTextCount,
+    }
+
+    return render(request, 'sellers/sellerPage.html', context=context)
+
+def makeSellerReview(request, seller_id):
+    try:
+        seller = Seller.objects.get(id=seller_id)
+    except:
+        raise Http404
+    if (not request.user.is_authenticated) or request.user == seller.user:
+        raise Http404
+    sellerRating = list(SellerRating.objects.filter(user=request.user, seller=seller))
+
+    if len(sellerRating) == 0:
+        sellerRatingExist = False
+    else:
+        sellerRatingExist = True
+    
+    if sellerRatingExist:
+        if request.GET.get('rating'):
+            sellerRating[0].value = int(request.GET.get('rating'))
+        sellerRating[0].text = request.GET.get('reviewText')
+        sellerRating[0].date = datetime.datetime.now()
+        sellerRating[0].save()
+    else:
+        if request.GET.get('rating'):
+            newSellerRating = SellerRating(value=int(request.GET.get('rating')), date=datetime.datetime.now(), user=request.user, seller=seller)
+            if request.GET.get('reviewText'):
+                newSellerRating.text = request.GET.get('reviewText')
+            newSellerRating.save()
+    return redirect('seller', seller_id)
+
+def sellerReviewsPage(request, seller_id, sort_key):
+    try:
+        seller = Seller.objects.get(id=seller_id)
+    except:
+        raise Http404
+    try:
+        sellerRating = SellerRating.objects.get(user=request.user, seller=seller)
+    except:
+        sellerRating = False
+    allReviews = list(SellerRating.objects.filter(seller=seller))
+    reviewsCount = len(allReviews)
+    try:
+        avgRating = round(sum(r.value for r in allReviews) / len(allReviews), 2)
+    except:
+        avgRating = 0
+    if avgRating % 1 == 0:
+        avgRating = int(avgRating)
+    if request.user.is_authenticated:
+        revs = list(SellerRating.objects.filter(seller=seller).exclude(user=request.user))
+    else:
+        revs = list(SellerRating.objects.filter(seller=seller))
+    if sort_key == 1: 
+        revs.sort(key=lambda x: x.date, reverse=True)
+    elif sort_key == 2:
+        revs.sort(key=lambda x: x.date, reverse=False)
+    elif sort_key == 3:
+        revs.sort(key=lambda x: x.value, reverse=False)
+    elif sort_key == 4:
+        revs.sort(key=lambda x: x.value, reverse=True)
+    reviewsWithoutUser = []
+    for r in revs:
+        if r.text or r.plus or r.minus:
+            reviewsWithoutUser.append(r)
+    reviewsWithTextCount = len(reviewsWithoutUser)
+    if reviewsWithTextCount <= 3:
+        raise Http404
+    if sellerRating:
+        if sellerRating.text:
+            reviewsWithTextCount += 1
+    context={
+        'seller': seller,
+        'sellerRating': sellerRating,
+        'reviews': allReviews,
+        'reviewsCount': reviewsCount,
+        'avgRating': avgRating,
+        'reviewsWithoutUser': reviewsWithoutUser,
+        'reviewsWithTextCount': reviewsWithTextCount,
+        'sortKey': sort_key,
+    }
+
+    return render(request, 'main/sellerReviewsPage.html', context=context)
 
 class SignUp(CreateView):
     form_class = SignUpForm

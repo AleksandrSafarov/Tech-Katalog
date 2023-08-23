@@ -61,20 +61,18 @@ img.seller-image {
 
 div.seller-info-and-image{
     padding-top: 2%;
-    width:100%;
-    margin-left: 15%;
     font-size:large;
+    display: grid;
+    grid-template-columns: 60% 40%;
 }
 
 div.seller-info-container{
-    float:left;
-    width: 50%;
+    width: 90%;
     word-wrap: break-word;
     padding-right: 5%;
 }
 
 div.seller-image-container{
-    float: right;
     width: 50%;
 }
 

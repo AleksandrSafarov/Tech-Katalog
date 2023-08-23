@@ -9,8 +9,8 @@
 {% block content %}
 
 <div class="container">
-    <a href="{% url 'product' product.id %}" class="link link-dark">
-        <h3 class="product-title">{{ product.name }}</h3>
+    <a href="{% url 'seller' seller.id %}" class="link link-dark">
+        <h3 class="product-title">{{ seller.name }}</h3>
     </a>
     <p>
         <span id="boot-icon" class="bi bi-star-fill" style="font-size: 1rem; color: rgb(255, 210, 48);"></span>
@@ -22,7 +22,7 @@
     </p>
     <p>Оценок: {{ reviewsCount }} | Отзывов: {{ reviewsWithTextCount }}</p>
     <hr>
-    <h4>Отзывы</h3>
+    <h4>Отзывы</h4>
     <p>Сортировать:</p>
     <ul class="rating-list">
         <li class="rating-element">
@@ -31,12 +31,12 @@
                 {% if sortKey == 1 %}
                 <b style="text-decoration: underline;">сначала новые</b>
                 {% else %}
-                <a href="{% url 'productReviews' product.id 1 %}">сначала новые</a>
+                <a href="{% url 'sellerReviews' seller.id 1 %}">сначала новые</a>
                 {% endif %} | 
                 {% if sortKey == 2 %}
                 <b style="text-decoration: underline;">сначала давние</b>
                 {% else %}
-                <a href="{% url 'productReviews' product.id 2 %}">сначала давние</a>
+                <a href="{% url 'sellerReviews' seller.id 2 %}">сначала давние</a>
                 {% endif %}</p>
         </li>
         <li class="rating-element">
@@ -48,12 +48,12 @@
                 {% if sortKey == 3 %}
                 <b style="text-decoration: underline;">по возрастанию</b>
                 {% else %}
-                <a href="{% url 'productReviews' product.id 3 %}">по возрастанию</a>
+                <a href="{% url 'sellerReviews' seller.id 3 %}">по возрастанию</a>
                 {% endif %} | 
                 {% if sortKey == 4 %}
                 <b style="text-decoration: underline;">по убыванию</b>
                 {% else %}
-                <a href="{% url 'productReviews' product.id 4 %}">по убыванию</a>
+                <a href="{% url 'sellerReviews' seller.id 4 %}">по убыванию</a>
                 {% endif %}</p>
             </p>
         </li>
