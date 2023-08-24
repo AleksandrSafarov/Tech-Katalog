@@ -213,8 +213,11 @@ def productReviewsPage(request, product_id, sort_key):
 
     page_number = request.GET.get("page")
     page_objects = paginator.get_page(page_number)
+
+    title = product.name
+    id = product.id
+
     context={
-        'product': product,
         'productRating': productRating,
         'page_objects': page_objects,
         'reviewsCount': reviewsCount,
@@ -222,9 +225,13 @@ def productReviewsPage(request, product_id, sort_key):
         'reviewsWithoutUser': reviewsWithoutUser,
         'reviewsWithTextCount': reviewsWithTextCount,
         'sortKey': sort_key,
+        'title': title,
+        'id': id,
+        'pathName': 'productReviews',
+        'name': 'product',
     }
 
-    return render(request, 'main/productReviewsPage.html', context=context)
+    return render(request, 'main/reviewsPage.html', context=context)
 
 
 def sellerPage(request, seller_id):
@@ -356,8 +363,11 @@ def sellerReviewsPage(request, seller_id, sort_key):
     page_number = request.GET.get("page")
     page_objects = paginator.get_page(page_number)
 
+    title = seller.name
+    id = seller.id
+
+
     context={
-        'seller': seller,
         'sellerRating': sellerRating,
         'reviews': allReviews,
         'reviewsCount': reviewsCount,
@@ -365,9 +375,13 @@ def sellerReviewsPage(request, seller_id, sort_key):
         'page_objects':page_objects,
         'reviewsWithTextCount': reviewsWithTextCount,
         'sortKey': sort_key,
+        'title': title,
+        'id': id,
+        'pathName': 'sellerReviews',
+        'name': 'seller',
     }
 
-    return render(request, 'main/sellerReviewsPage.html', context=context)
+    return render(request, 'main/reviewsPage.html', context=context)
 
 class SignUp(CreateView):
     form_class = SignUpForm
