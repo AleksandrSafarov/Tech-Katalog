@@ -19,7 +19,7 @@
                 {% if sortKey == 1 %}
                 <b style="text-decoration: underline;">сначала новые</b>
                 {% else %}
-                <a href="{% url 'all' 1 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">сначала новые</a>
+                <a href="{% url pathName 1 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">сначала новые</a>
                 {% endif %}</p>
         </li>
         <li class="rating-element">
@@ -31,12 +31,12 @@
                 {% if sortKey == 2 %}
                 <b style="text-decoration: underline;">по возрастанию</b>
                 {% else %}
-                <a href="{% url 'all' 2 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по возрастанию</a>
+                <a href="{% url pathName 2 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по возрастанию</a>
                 {% endif %} | 
                 {% if sortKey == 3 %}
                 <b style="text-decoration: underline;">по убыванию</b>
                 {% else %}
-                <a href="{% url 'all' 3 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по убыванию</a>
+                <a href="{% url pathName 3 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по убыванию</a>
                 {% endif %}</p>
             </p>
         </li>
@@ -50,12 +50,12 @@
                 {% if sortKey == 4 %}
                 <b style="text-decoration: underline;">по возрастанию</b>
                 {% else %}
-                <a href="{% url 'all' 4 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по возрастанию</a>
+                <a href="{% url pathName 4 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по возрастанию</a>
                 {% endif %} | 
                 {% if sortKey == 5 %}
                 <b style="text-decoration: underline;">по убыванию</b>
                 {% else %}
-                <a href="{% url 'all' 5 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по убыванию</a>
+                <a href="{% url pathName 5 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по убыванию</a>
                 {% endif %}</p>
             </p>
         </li>
@@ -68,19 +68,19 @@
                 {% if sortKey == 6 %}
                 <b style="text-decoration: underline;">по возрастанию</b>
                 {% else %}
-                <a href="{% url 'all' 6 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по возрастанию</a>
+                <a href="{% url pathName 6 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по возрастанию</a>
                 {% endif %} | 
                 {% if sortKey == 7 %}
                 <b style="text-decoration: underline;">по убыванию</b>
                 {% else %}
-                <a href="{% url 'all' 7 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по убыванию</a>
+                <a href="{% url pathName 7 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по убыванию</a>
                 {% endif %}</p>
             </p>
         </li>
         </ul>
     <hr>
     <p>Фильтры:</p>
-    <form action="{% url 'all' sortKey %}">
+    <form action="{% url pathName sortKey %}">
     <ul class="rating-list">
         <li class="rating-element">
             <p>

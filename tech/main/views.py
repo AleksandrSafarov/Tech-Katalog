@@ -50,10 +50,11 @@ def categoryProductList(request, category_id, sort_key):
     context={
         'title': title,
         'page_objects':page_objects,
-        'category': category_id,
-        'sortKey': sort_key
+        'id': category_id,
+        'sortKey': sort_key,
+        'pathName': request.resolver_match.url_name,
     }
-    return render(request, "main/categoryProductList.html", context=context)
+    return render(request, "main/productListWithId.html", context=context)
 
 def allProductsList(request, sort_key):
     products = list(Product.objects.all())
@@ -72,6 +73,7 @@ def allProductsList(request, sort_key):
         'title': title,
         'page_objects':page_objects,
         'sortKey': sort_key,
+        'pathName': request.resolver_match.url_name
     }
     return render(request, "main/productList.html", context=context)
 
@@ -178,14 +180,10 @@ def productReviewsPage(request, product_id, sort_key):
         productRating = ProductRating.objects.get(user=request.user, product=product)
     except:
         productRating = False
+    avgRating = product.getAvgProductRating()
+    reviewsCount = product.getProductRatingCount()
+    
     allReviews = list(ProductRating.objects.filter(product=product))
-    reviewsCount = len(allReviews)
-    try:
-        avgRating = round(sum(r.value for r in allReviews) / len(allReviews), 2)
-    except:
-        avgRating = 0
-    if avgRating % 1 == 0:
-        avgRating = int(avgRating)
     if request.user.is_authenticated:
         revs = list(ProductRating.objects.filter(product=product).exclude(user=request.user))
     else:
@@ -227,7 +225,7 @@ def productReviewsPage(request, product_id, sort_key):
         'sortKey': sort_key,
         'title': title,
         'id': id,
-        'pathName': 'productReviews',
+        'pathName': request.resolver_match.url_name,
         'name': 'product',
     }
 
@@ -377,7 +375,7 @@ def sellerReviewsPage(request, seller_id, sort_key):
         'sortKey': sort_key,
         'title': title,
         'id': id,
-        'pathName': 'sellerReviews',
+        'pathName': request.resolver_match.url_name,
         'name': 'seller',
     }
 
