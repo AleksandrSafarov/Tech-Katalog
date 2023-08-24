@@ -1,4 +1,4 @@
-def productSort(products, sort_key, noStock=False, withDiscount=False, withRating=False):
+def productSort(products, sort_key, inStock=False, withDiscount=False, withRating=False):
     if sort_key == 1:
         products.sort(key=lambda x: x.id, reverse=True)
     elif sort_key == 2:
@@ -14,7 +14,7 @@ def productSort(products, sort_key, noStock=False, withDiscount=False, withRatin
     elif sort_key == 7:
         products.sort(key=lambda x: x.getPriceWithDiscount(), reverse=True)
 
-    if noStock:
+    if inStock == 'on':
         products1 = []
         for p in products:
             if p.stock != 0:
@@ -22,7 +22,7 @@ def productSort(products, sort_key, noStock=False, withDiscount=False, withRatin
     else:
         products1 = products
     
-    if withDiscount:
+    if withDiscount == 'on':
         products2 = []
         for p in products1:
             if p.hasDiscount():
@@ -30,7 +30,7 @@ def productSort(products, sort_key, noStock=False, withDiscount=False, withRatin
     else:
         products2 = products1
     
-    if withRating:
+    if withRating == 'on':
         products3 = []
         for p in products2:
             if p.getProductRatingCount():

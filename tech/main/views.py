@@ -37,7 +37,7 @@ def categoryProductList(request, category_id, sort_key):
         raise Http404
     products = list(Product.objects.filter(category=category))
     
-    sortedProducts = productSort(products, sort_key, noStock=request.GET.get('noStock'),
+    sortedProducts = productSort(products, sort_key, inStock=request.GET.get('inStock'),
                                  withDiscount=request.GET.get('withDiscount'), withRating=request.GET.get('withRating'))
     
     paginator = Paginator(sortedProducts, 1)
@@ -59,10 +59,10 @@ def categoryProductList(request, category_id, sort_key):
 def allProductsList(request, sort_key):
     products = list(Product.objects.all())
     
-    sortedProducts = productSort(products, sort_key, noStock=request.GET.get('noStock'),
+    sortedProducts = productSort(products, sort_key, inStock=request.GET.get('inStock'),
                                  withDiscount=request.GET.get('withDiscount'), withRating=request.GET.get('withRating'))
 
-    paginator = Paginator(sortedProducts, 10)
+    paginator = Paginator(sortedProducts, 2)
 
     page_number = request.GET.get("page")
     page_objects = paginator.get_page(page_number)

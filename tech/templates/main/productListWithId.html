@@ -19,7 +19,7 @@
                 {% if sortKey == 1 %}
                 <b style="text-decoration: underline;">сначала новые</b>
                 {% else %}
-                <a href="{% url pathName id 1 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">сначала новые</a>
+                <a href="{% url pathName id 1 %}?{% if request.GET.inStock %}inStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">сначала новые</a>
                 {% endif %}</p>
         </li>
         <li class="rating-element">
@@ -31,12 +31,12 @@
                 {% if sortKey == 2 %}
                 <b style="text-decoration: underline;">по возрастанию</b>
                 {% else %}
-                <a href="{% url pathName id 2 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по возрастанию</a>
+                <a href="{% url pathName id 2 %}?{% if request.GET.inStock %}inStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по возрастанию</a>
                 {% endif %} | 
                 {% if sortKey == 3 %}
                 <b style="text-decoration: underline;">по убыванию</b>
                 {% else %}
-                <a href="{% url pathName id 3 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по убыванию</a>
+                <a href="{% url pathName id 3 %}?{% if request.GET.inStock %}inStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по убыванию</a>
                 {% endif %}</p>
             </p>
         </li>
@@ -50,12 +50,12 @@
                 {% if sortKey == 4 %}
                 <b style="text-decoration: underline;">по возрастанию</b>
                 {% else %}
-                <a href="{% url pathName id 4 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по возрастанию</a>
+                <a href="{% url pathName id 4 %}?{% if request.GET.inStock %}inStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по возрастанию</a>
                 {% endif %} | 
                 {% if sortKey == 5 %}
                 <b style="text-decoration: underline;">по убыванию</b>
                 {% else %}
-                <a href="{% url pathName id 5 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по убыванию</a>
+                <a href="{% url pathName id 5 %}?{% if request.GET.inStock %}inStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по убыванию</a>
                 {% endif %}</p>
             </p>
         </li>
@@ -68,12 +68,12 @@
                 {% if sortKey == 6 %}
                 <b style="text-decoration: underline;">по возрастанию</b>
                 {% else %}
-                <a href="{% url pathName id 6 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по возрастанию</a>
+                <a href="{% url pathName id 6 %}?{% if request.GET.inStock %}inStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по возрастанию</a>
                 {% endif %} | 
                 {% if sortKey == 7 %}
                 <b style="text-decoration: underline;">по убыванию</b>
                 {% else %}
-                <a href="{% url pathName id 7 %}?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по убыванию</a>
+                <a href="{% url pathName id 7 %}?{% if request.GET.inStock %}inStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">по убыванию</a>
                 {% endif %}</p>
             </p>
         </li>
@@ -84,10 +84,10 @@
     <ul class="rating-list">
         <li class="rating-element">
             <p>
-                {% if request.GET.noStock %}
-                <input type="checkbox" name="noStock" checked>
+                {% if request.GET.inStock %}
+                <input type="checkbox" name="inStock" checked>
                 {% else %}
-                <input type="checkbox" name="noStock">
+                <input type="checkbox" name="inStock">
                 {% endif %}
                 <label>Только в наличии</label>
             </p>
@@ -174,13 +174,13 @@
                     {% if productInCart %}
                     {% getProductInCartCount product.id user.id as productInCartCount %}
                     {% if productInCartCount %}
-                    <p style="font-size: large;"><a href="{% url 'minusProductInCart' product.id %}" class="cart-count-symbol"><b>-</b></a> | {{productInCartCount}} | 
-                      {% if product.stock > productInCartCount %}<a href="{% url 'plusProductInCart' product.id %}" class="cart-count-symbol"><b>+</b></a>{% endif %}</p>
-                    {% endif %}
-                    {% else %}
-                    <a href="{% url 'addToCart' product.id %}">
-                      <button class="btn btn-danger">В корзину</button>
-                    </a>
+                    <p style="font-size: large;"><a href="{% url 'minusProductInCart' product.id %}?pathName={{ request.resolver_match.url_name }}&id={{id}}&sortKey={{sortKey}}&page={{page_objects.number}}&{% if request.GET.inStock %}inStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}" class="cart-count-symbol"><b>-</b></a> | {{productInCartCount}} | 
+                        {% if product.stock > productInCartCount %}<a href="{% url 'plusProductInCart' product.id %}?pathName={{ request.resolver_match.url_name }}&id={{id}}&sortKey={{sortKey}}&page={{page_objects.number}}&{% if request.GET.inStock %}inStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}" class="cart-count-symbol"><b>+</b></a>{% endif %}</p>
+                      {% endif %}
+                      {% else %}
+                      <a href="{% url 'addToCart' product.id %}?pathName={{ request.resolver_match.url_name }}&id={{id}}&sortKey={{sortKey}}&page={{page_objects.number}}&{% if request.GET.inStock %}inStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on{% endif %}">
+                        <button class="btn btn-danger">В корзину</button>
+                      </a>
                     {% endif %}
                 {% endif %}
                 {% endif %}
@@ -198,9 +198,9 @@
     <span class="step-links">
         {% if page_objects.has_previous %}
         {% if page_objects.previous_page_number != 1 %}
-            <a href="?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}page=1">&#8810;1</a><span> | </span>
+            <a href="?{% if request.GET.inStock %}inStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}page=1">&#8810;1</a><span> | </span>
         {% endif %}
-            <a href="?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}page={{ page_objects.previous_page_number }}">&#8826;{{ page_objects.previous_page_number }}</a><span> | </span>
+            <a href="?{% if request.GET.inStock %}inStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}page={{ page_objects.previous_page_number }}">&#8826;{{ page_objects.previous_page_number }}</a><span> | </span>
         {% endif %}
 
         <span class="current">
@@ -208,9 +208,9 @@
         </span>
 
         {% if page_objects.has_next %}
-            <span> | </span><a href="?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}page={{ page_objects.next_page_number }}">{{ page_objects.next_page_number }}&#8827;</a>
+            <span> | </span><a href="?{% if request.GET.inStock %}inStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}page={{ page_objects.next_page_number }}">{{ page_objects.next_page_number }}&#8827;</a>
             {% if page_objects.paginator.num_pages != page_objects.next_page_number %}
-            <span> | </span><a href="?{% if request.GET.noStock %}noStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}page={{ page_objects.paginator.num_pages }}">{{ page_objects.paginator.num_pages }}&#8811;</a>
+            <span> | </span><a href="?{% if request.GET.inStock %}inStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}page={{ page_objects.paginator.num_pages }}">{{ page_objects.paginator.num_pages }}&#8811;</a>
             {% endif %}
         {% endif %}
     </span>

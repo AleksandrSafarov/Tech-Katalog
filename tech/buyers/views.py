@@ -4,11 +4,12 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.shortcuts import redirect
-from django.urls.base import reverse_lazy
+from django.urls.base import reverse_lazy, reverse
 from django.views.generic import *
 from django.http import Http404
 
 from .models import *
+from .utils import *
 
 import datetime
 
@@ -46,6 +47,15 @@ def addToCart(request, product_id):
     
     newProductInCart = ProductInCart(user=request.user, product=product, count=1, date=datetime.datetime.now())
     newProductInCart.save()
+
+    path = getUrl(int(request.GET.get('page')), request.GET.get('inStock'), request.GET.get('withDiscount'), request.GET.get('withRating'))
+    if request.GET.get('pathName'):
+        if request.GET.get('sortKey'):
+            if request.GET.get('id'):
+                return redirect(reverse(request.GET.get('pathName'), args=[int(request.GET.get('id')), int(request.GET.get('sortKey'))]) + path)
+            else:
+                return redirect(reverse(request.GET.get('pathName'), args=[int(request.GET.get('sortKey'))]) + path)
+        
     return redirect('product', product_id)
 
 def plusProductInCart(request, product_id):
@@ -65,6 +75,15 @@ def plusProductInCart(request, product_id):
         productInCart.delete()
     else:
         productInCart.save()
+
+    path = getUrl(int(request.GET.get('page')), request.GET.get('inStock'), request.GET.get('withDiscount'), request.GET.get('withRating'))
+    if request.GET.get('pathName'):
+        if request.GET.get('sortKey'):
+            if request.GET.get('id'):
+                return redirect(reverse(request.GET.get('pathName'), args=[int(request.GET.get('id')), int(request.GET.get('sortKey'))]) + path)
+            else:
+                return redirect(reverse(request.GET.get('pathName'), args=[int(request.GET.get('sortKey'))]) + path)
+            
     return redirect('product', product_id)
 
 def minusProductInCart(request, product_id):
@@ -84,4 +103,13 @@ def minusProductInCart(request, product_id):
         productInCart.delete()
     else:
         productInCart.save()
+    
+    path = getUrl(int(request.GET.get('page')), request.GET.get('inStock'), request.GET.get('withDiscount'), request.GET.get('withRating'))
+    if request.GET.get('pathName'):
+        if request.GET.get('sortKey'):
+            if request.GET.get('id'):
+                return redirect(reverse(request.GET.get('pathName'), args=[int(request.GET.get('id')), int(request.GET.get('sortKey'))]) + path)
+            else:
+                return redirect(reverse(request.GET.get('pathName'), args=[int(request.GET.get('sortKey'))]) + path)
+            
     return redirect('product', product_id)    
