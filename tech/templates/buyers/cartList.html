@@ -12,9 +12,9 @@
 <div class="container">
     <h2>{{ title }}</h2>
     <hr>
-    <h3>{{ totalPrice }} ₽</h3>
-    <hr>
     {% if products %}
+    <h4>Сумма: {{ totalPrice }} ₽ <a href="#" class="text-decoration-none"><button class="btn btn-danger">Оформить заказ</button></h3></a>
+    <hr>
     <div class="product-list">
     {% for product in products %}
     <div class="product-item">

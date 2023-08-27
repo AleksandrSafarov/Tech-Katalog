@@ -1,3 +1,5 @@
+from buyers.models import *
+
 def productSort(products, sort_key, inStock=False, withDiscount=False, withRating=False):
     if sort_key == 1:
         products.sort(key=lambda x: x.id, reverse=True)
@@ -39,3 +41,15 @@ def productSort(products, sort_key, inStock=False, withDiscount=False, withRatin
         products3 = products2
     
     return products3
+
+def changeStock(product):
+    productInCart = list(ProductInCart.objects.filter(product=product))
+    for p in productInCart:
+        print(p.count)
+        print(product.stock)
+        if p.count > product.stock:
+            print('*')
+            p.count = product.stock
+            p.save()
+        if product.stock == 0:
+            p.delete()

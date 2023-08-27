@@ -7,6 +7,7 @@ from .utils import *
 from main.models import *
 
 from main.models import *
+from main.utils import *
 
 import datetime
 
@@ -47,6 +48,7 @@ def changeData(request, product_id):
         newStock = int(request.GET.get('newStock'))
         product.stock = newStock
         product.save()
+        changeStock(product)
     if request.GET.get('newDescription'):
         newDescription = request.GET.get('newDescription')
         product.description = newDescription
