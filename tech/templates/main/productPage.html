@@ -30,7 +30,7 @@
         <p style="color: gray;">Нет оценок</p>
         {% endif %}
       </p>
-      <a href="{% url 'favorite' product.id %}">
+      <a href="{% url 'addToFavorite' product.id %}">
         {% if user.is_authenticated %}
             {% isFavorite product.id user.id as productIsFavorite %}
             {% if productIsFavorite %}
@@ -100,7 +100,7 @@
         <p style="color: gray;">Нет оценок</p>
         {% endif %}
       </p>
-      <a href="{% url 'favorite' product.id %}">
+      <a href="{% url 'addToFavorite' product.id %}">
         {% if user.is_authenticated %}
             {% isFavorite product.id user.id as productIsFavorite %}
             {% if productIsFavorite %}

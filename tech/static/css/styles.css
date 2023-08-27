@@ -228,3 +228,7 @@ div.product-list-item-info{
     text-decoration: none;
     color: black;
 }
+
+.no-products{
+    text-align: center;
+}

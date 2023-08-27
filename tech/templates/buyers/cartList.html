@@ -1,0 +1,84 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load productInCartTag %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block extraheader %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h2>{{ title }}</h2>
+    <hr>
+    <h3>{{ totalPrice }} ₽</h3>
+    <hr>
+    {% if products %}
+    <div class="product-list">
+    {% for product in products %}
+    <div class="product-item">
+    <div class="product-item-info-and-image">
+    <div class="product-item-image">
+        <img src="{{ product.product.main_image.url }}" class="product-list-image">
+    </div>
+    <div class="product-item-info">
+        <a href="{% url 'product' product.product.id %}" class="link-dark">
+            {{ product.product.name }}
+        </a>
+        <div class="product-list-item-info">
+            <div>
+                {% if product.product.getProductRatingCount %}
+                <p style="margin-bottom: 0; font-size: medium;">
+                    <span id="boot-icon" class="bi bi-star-fill" style="font-size: 0.8rem; color: rgb(255, 210, 48);"></span>
+                    <span id="boot-icon" class="bi {% if product.product.getAvgProductRating > 1.8 %}bi-star-fill{% elif product.product.getAvgProductRating > 1.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 0.8rem; color: rgb(255, 210, 48);"></span>
+                    <span id="boot-icon" class="bi {% if product.product.getAvgProductRating > 2.8 %}bi-star-fill{% elif product.product.getAvgProductRating > 2.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 0.8rem; color: rgb(255, 210, 48);"></span>
+                    <span id="boot-icon" class="bi {% if product.product.getAvgProductRating > 3.8 %}bi-star-fill{% elif product.product.getAvgProductRating > 3.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 0.8rem; color: rgb(255, 210, 48);"></span>
+                    <span id="boot-icon" class="bi {% if product.product.getAvgProductRating > 4.8 %}bi-star-fill{% elif product.product.getAvgProductRating > 4.3 %}bi-star-half{% else %}bi-star{% endif %}" style="font-size: 0.8rem; color: rgb(255, 210, 48);"></span>
+                    <span style="color:grey; margin-left: 10px;">{{ product.product.getProductRatingCount }}</span>
+                </p>
+                {% else %}
+                <p style="margin-bottom: 0; font-size: medium; color:grey;">Нет оценок</p>
+                {% endif %}
+                <p style="font-size: medium; margin-bottom: 0;">{% if product.product.stock != 0 %}Количество: {{ product.product.stock }} шт.{% else %}Нет в наличии{% endif %}</p>
+                <p style="font-size: medium;">Продавец: <a href="{% url 'seller' product.product.seller.id %}" class="link-dark">{{ product.product.seller }}</a></p>
+            </div>
+            <div>
+                {% if product.product.hasDiscount %}
+                <h5 style="color: rgb(255, 20, 20);">{{ product.product.getPriceWithDiscount }} ₽ <s style="font-size:small; color:rgb(107, 107, 107)">{{ product.product.price }} ₽</s></h5>
+                {% else %}
+                <h5>{{ product.product.price }} ₽</h5>
+                {% endif %}
+                {% if user != product.product.seller.user %}
+                {% if product.product.stock %}
+                    {% isProductInCart product.product.id user.id as productInCart %}
+                    {% if productInCart %}
+                    {% getProductInCartCount product.product.id user.id as productInCartCount %}
+                    {% if productInCartCount %}
+                    <p style="font-size: large; margin-bottom: 0;"><a href="{% url 'minusProductInCart' product.product.id %}?pathName={{ request.resolver_match.url_name }}" class="cart-count-symbol"><b>-</b></a> | {{productInCartCount}} | 
+                      {% if product.product.stock > productInCartCount %}<a href="{% url 'plusProductInCart' product.product.id %}?pathName={{ request.resolver_match.url_name }}" class="cart-count-symbol"><b>+</b></a>{% endif %}</p>
+                    <a href="{% url 'deleteProductInCart' product.product.id %}?pathName={{ request.resolver_match.url_name }}&sortKey={{sortKey}}" class="link-secondary" style="font-size: small;">Удалить из корзины</a>
+                    {% endif %}
+                    {% else %}
+                    <a href="{% url 'addToCart' product.product.id %}?pathName={{ request.resolver_match.url_name }}">
+                      <button class="btn btn-danger">В корзину</button>
+                    </a>
+                    {% endif %}
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        
+        </div>
+</div>
+</div>
+<hr>
+    {% endfor %}
+    </div>
+
+{% else %}
+<h3 class="no-products">В корзине ничего нет</h3>
+{% endif %}
+</div>
+
+{% endblock %}

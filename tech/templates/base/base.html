@@ -41,8 +41,8 @@
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li><span class="dropdown-item-text">Почта: {{ user.email }}</span></li>
                                 <hr class="dropdown-line">
-                                <li><a class="dropdown-item" href="#">Корзина</a></li>
-                                <li><a class="dropdown-item" href="#">Избранное</a></li>
+                                <li><a class="dropdown-item" href="{% url 'cart' %}">Корзина</a></li>
+                                <li><a class="dropdown-item" href="{% url 'favorite' 1 %}">Избранное</a></li>
                                 <li><a class="dropdown-item" href="#">История заказов</a></li>
                                 <hr class="dropdown-line">
                                 {% checkIsSeller user as isSeller %}
