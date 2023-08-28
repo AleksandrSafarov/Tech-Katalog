@@ -34,6 +34,7 @@
 
 			{% if "login" in request.path %}
 				<div class="signup-link">Нет аккаунта? <a href="{% url 'signup' %}">Создайте!</a></div>
+				<div><a href="{% url 'forgotLoginPage' %}">Забыли логин?</a></div>
 			{% endif %}
 			{% if "signup" in request.path %}
 				<div class="signup-link">Есть аккаунт? <a href="{% url 'login' %}">Войти?</a></div>

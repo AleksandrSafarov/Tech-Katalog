@@ -17,5 +17,7 @@ urlpatterns = [
     path('edituserdata/', ChangeUserData.as_view(), name='editData'),
     path('changepassword/', ChangePass.as_view(), name='changePassword'),
     path('productreviews/<int:product_id>/<int:sort_key>', productReviewsPage, name='productReviews'),
-    path('sellerreviews/<int:seller_id>/<int:sort_key>', sellerReviewsPage, name='sellerReviews')
+    path('sellerreviews/<int:seller_id>/<int:sort_key>', sellerReviewsPage, name='sellerReviews'),
+    path('makesearch/', search, name='makeSearch'),
+    path('search/<int:sort_key>', searchPage, name="search")
 ]

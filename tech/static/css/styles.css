@@ -232,3 +232,11 @@ div.product-list-item-info{
 .no-products{
     text-align: center;
 }
+
+div.search{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 2%;
+    padding-left: 20%;
+    margin-right: -40%;
+}

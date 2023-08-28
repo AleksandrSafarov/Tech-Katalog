@@ -4,7 +4,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.shortcuts import redirect
-from django.urls.base import reverse_lazy
+from django.urls.base import reverse_lazy, reverse
 from django.views.generic import *
 from django.http import Http404, HttpResponseRedirect
 from django.db.models import Q
@@ -74,6 +74,46 @@ def allProductsList(request, sort_key):
         'page_objects':page_objects,
         'sortKey': sort_key,
         'pathName': request.resolver_match.url_name
+    }
+    return render(request, "main/productList.html", context=context)
+
+def search(request):
+    if not request.GET.get('search'):
+        return redirect('all', 1)
+    return redirect(reverse('search', args=[1]) + f'?search={request.GET.get("search")}')
+
+def searchPage(request, sort_key):
+    products = list(Product.objects.all())
+
+    if not request.GET.get('search'):
+        return redirect('all', 1)
+
+    selectedProducts = []
+    searchText = request.GET.get('search')
+    searchWords = searchText.split()
+
+    for p in products:
+        for w in searchWords:
+            if w.lower() in p.name.lower() or p.name.lower() in w.lower():
+                selectedProducts.append(p)
+                break
+
+    sortedProducts = productSort(selectedProducts, sort_key, inStock=request.GET.get('inStock'),
+                                 withDiscount=request.GET.get('withDiscount'), withRating=request.GET.get('withRating'))
+
+    paginator = Paginator(sortedProducts, 2)
+
+    page_number = request.GET.get("page")
+    page_objects = paginator.get_page(page_number)
+    
+    title = f'Поиск: \"{searchText}\"'
+
+    context={
+        'title': title,
+        'page_objects':page_objects,
+        'sortKey': sort_key,
+        'pathName': request.resolver_match.url_name,
+        'searchText': searchText,
     }
     return render(request, "main/productList.html", context=context)
 
@@ -230,6 +270,7 @@ def productReviewsPage(request, product_id, sort_key):
     }
 
     return render(request, 'main/reviewsPage.html', context=context)
+
 
 
 def sellerPage(request, seller_id):

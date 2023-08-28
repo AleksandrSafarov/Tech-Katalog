@@ -242,3 +242,42 @@ def makeOrder(request):
                          to=[request.user.email])
     email.send()
     return redirect('cart')
+
+def forgotLoginPage(request):
+
+    context={
+        'title': 'Восстановить логин ',
+        'text': 'Если Вы были зарегистрированы на сайте, то на Вашу почту придет письмо с логином',
+        'formAction': 'forgotLogin',
+        'placeholder': 'Ваша почта',
+        'inputName': 'email',
+    }
+
+    return render(request, "main/forgot.html", context=context)
+
+def forgotLogin(request):
+    email = request.GET.get('email')
+    user = list(User.objects.filter(email=email))
+    if len(user) == 0:
+        return redirect('login')
+    text = ''
+    if len(user) > 1:
+        for i in range(len(user)):
+            text += user[i].username
+            if i != len(user) - 1:
+                text += ', '
+    else:
+        text += user[0].username
+
+    if len(user) == 1:
+        email = EmailMessage(f'Восстановление логина',
+                         f'Найден логин: {text}.\n2023 © Tech-Katalog',
+                         settings.DEFAULT_FROM_EMAIL,
+                         to=[email])
+    else:
+        email = EmailMessage(f'Восстановление логина',
+                            f'Найдены логины: {text}.\n2023 © Tech-Katalog',
+                            settings.DEFAULT_FROM_EMAIL,
+                            to=[email])
+    email.send()
+    return redirect('login')

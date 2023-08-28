@@ -26,12 +26,18 @@
                 </a>
                     
                 <ul class="nav nav-pills" style="margin-right:4%">
-                    
-                    <li class="navitem">
-                        <a class="nav-link text-light text-decoration-underline fs-4" href="{% url 'index' %}">
-                            Тут будет поиск
-                       </a>
+                    <form action="{% url 'makeSearch' %}">
+                    <li class="nav-item">
+                        <div class="search">
+                            <div>
+                        <input type="text" class="form-control" maxlength="200"  placeholder="Поиск" name="search">
+                    </div>
+                    <div>
+                        <input type="submit" class="btn btn-dark" value="🔍︎">
+                    </div>
+                    </div>
                     </li>
+                </form>
                     {% if request.user.is_authenticated %}
                     <li class="nav-item">
                         <div class="dropdown" style="margin-top: 4%;">
