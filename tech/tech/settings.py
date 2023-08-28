@@ -126,3 +126,11 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 2525
+EMAIL_HOST_USER = "techkatalog@mail.ru"
+DEFAULT_FROM_EMAIL = 'techkatalog@mail.ru'
+EMAIL_HOST_PASSWORD = "D7kehZrkdHnYVujYscbH"
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

@@ -15,7 +15,7 @@ def isProductInCart(product_id, user_id=0):
         user = User.objects.get(id=user_id)
     except:
         return False
-    productInCart = list(ProductInCart.objects.filter(product=product, user=user))
+    productInCart = list(ProductInCart.objects.filter(product=product, user=user, is_active=True))
     if len(productInCart):
         return True
     return False
@@ -29,7 +29,7 @@ def getProductInCartCount(product_id, user_id=0):
         user = User.objects.get(id=user_id)
     except:
         return 0
-    productInCart = list(ProductInCart.objects.filter(product=product, user=user))
+    productInCart = list(ProductInCart.objects.filter(product=product, user=user, is_active=True))
     if len(productInCart):
         return productInCart[0].count
     return 0

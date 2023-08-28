@@ -29,16 +29,13 @@ class SavedAddress(models.Model):
     class Meta:
         verbose_name_plural = "Saved addresses"
 
-class ProductInOrder(models.Model):
-    productInCart = models.ForeignKey(ProductInCart, on_delete=models.CASCADE)
-    address = models.ForeignKey(SavedAddress, on_delete=models.CASCADE)
-    is_active = models.BooleanField(default=True)
+class Order(models.Model):
+    date = models.DateTimeField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    total_price = models.PositiveIntegerField()
 
     def __str__(self):
-        return self.product.product.name + self.product.user
-
-    class Meta:
-        verbose_name_plural = "Product in order"
+        return str(self.id) + ' - ' + str(self.total_price)
 
 class Favorites(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

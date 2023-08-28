@@ -13,7 +13,11 @@
     <h2>{{ title }}</h2>
     <hr>
     {% if products %}
-    <h4>Сумма: {{ totalPrice }} ₽ <a href="#" class="text-decoration-none"><button class="btn btn-danger">Оформить заказ</button></h3></a>
+    <h4>Сумма: {{ totalPrice }} ₽</h4>
+    <form action="{% url 'makeOrder' %}">
+        <input class="form-control" placeholder="Адрес доставки" required name="address" style="width: 40%; margin-bottom: 0.3%;">
+        <input type="submit" class="btn btn-danger" value="Оформить заказ">
+    </form>
     <hr>
     <div class="product-list">
     {% for product in products %}

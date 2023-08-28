@@ -10,4 +10,5 @@ urlpatterns = [
     path('delete/<int:product_id>', deleteProductInCart, name='deleteProductInCart'),
     path('favorite/<int:sort_key>', favoritePage, name='favorite'),
     path('cart/', cartPage, name='cart'),
+    path('cart/makeorder', makeOrder, name='makeOrder')
 ]

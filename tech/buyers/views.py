@@ -8,11 +8,14 @@ from django.urls.base import reverse_lazy, reverse
 from django.views.generic import *
 from django.http import Http404
 
+from django.core.paginator import Paginator
+from django.core.mail import EmailMessage
+
+from django.conf import settings
+
 from .models import *
 from .utils import *
 from main.utils import *
-
-from django.core.paginator import Paginator
 
 import datetime
 
@@ -44,7 +47,7 @@ def addToCart(request, product_id):
     if request.user == product.seller.user or product.stock == 0:
         raise Http404
     
-    productInCart = list(ProductInCart.objects.filter(product=product, user=request.user))
+    productInCart = list(ProductInCart.objects.filter(product=product, user=request.user, is_active=True))
     if len(productInCart):
         raise Http404
     
@@ -69,7 +72,7 @@ def plusProductInCart(request, product_id):
         raise Http404
     try:
         product = Product.objects.get(id=product_id)
-        productInCart = ProductInCart.objects.get(user=request.user, product=product)
+        productInCart = ProductInCart.objects.get(user=request.user, product=product, is_active=True)
     except:
         raise Http404
     
@@ -104,7 +107,7 @@ def minusProductInCart(request, product_id):
         raise Http404
     try:
         product = Product.objects.get(id=product_id)
-        productInCart = ProductInCart.objects.get(user=request.user, product=product)
+        productInCart = ProductInCart.objects.get(user=request.user, product=product, is_active=True)
     except:
         raise Http404
     
@@ -140,7 +143,7 @@ def deleteProductInCart(request, product_id):
     print('*')
     try:
         product = Product.objects.get(id=product_id)
-        productInCart = ProductInCart.objects.get(user=request.user, product=product)
+        productInCart = ProductInCart.objects.get(user=request.user, product=product, is_active=True)
     except:
         raise Http404
     
@@ -193,7 +196,7 @@ def cartPage(request):
     if not request.user.is_authenticated:
         redirect('login')
     
-    productsInCart = list(ProductInCart.objects.filter(user=request.user))
+    productsInCart = list(ProductInCart.objects.filter(user=request.user, is_active=True))
     productsInCart.sort(key=lambda x: x.date, reverse=True)
 
     totalPrice = sum(x.product.getPriceWithDiscount() * x.count for x in productsInCart)
@@ -207,3 +210,35 @@ def cartPage(request):
     }
 
     return render(request, "buyers/cartList.html", context=context)
+
+def makeOrder(request):
+    if not request.user.is_authenticated:
+         raise Http404
+    
+    productInCart = list(ProductInCart.objects.filter(user=request.user, is_active=True))
+    if len(productInCart) == 0:
+        raise Http404
+    totalPrice = 0
+    for p in productInCart:
+        if p.count <= p.product.stock:
+            totalPrice += p.count * p.product.getPriceWithDiscount()
+        else:
+            p.count = p.product.stock
+            if p.product.stock == 0:
+                p.delete()
+                continue
+            p.save()
+            totalPrice += p.count * p.product.getPriceWithDiscount()
+        p.product.stock -= p.count
+        p.product.save()
+        p.is_active = False
+        p.save()
+    address = request.GET.get('address')
+    newOrder = Order(date=datetime.datetime.now(), user=request.user, total_price=totalPrice)
+    newOrder.save()
+    email = EmailMessage(f'Заказ №{newOrder.id}',
+                         f'Адрес: {address}. Сумма: {totalPrice} ₽.\n2023 © Tech-Katalog',
+                         settings.DEFAULT_FROM_EMAIL,
+                         to=[request.user.email])
+    email.send()
+    return redirect('cart')
