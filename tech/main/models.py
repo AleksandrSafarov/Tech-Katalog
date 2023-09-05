@@ -70,6 +70,10 @@ class Product(models.Model):
         if priceWithDiscount == 0:
             return 1
         return priceWithDiscount
+    
+    def getPopularity(self):
+        popularity = list(Popularity.objects.filter(product=self))
+        return len(popularity)
 
 class ProductImage(models.Model):
     image = models.ImageField(upload_to='images/products/')

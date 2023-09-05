@@ -1,3 +1,6 @@
+from main.models import Popularity
+import datetime
+
 def getUrl(page=0, inStock=False, withDiscount=False, withRating=False):
     res = ''
     if page:
@@ -9,3 +12,9 @@ def getUrl(page=0, inStock=False, withDiscount=False, withRating=False):
         if withRating == 'on':
             res += f'withRating={withRating}'
     return res
+
+def makePopularity(productsInCart):
+    for p in productsInCart:
+        for i in range(p.count):
+            newPopularity = Popularity(product=p.product, finish_date=datetime.datetime.now() + datetime.timedelta(days=30))
+            newPopularity.save()

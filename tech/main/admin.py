@@ -39,6 +39,10 @@ class StorageAdmin(admin.ModelAdmin):
     list_display = ('id', 'storage_value', 'product')
     list_display_links = ('id', 'storage_value')
 
+class ProductRatingAdmin(admin.ModelAdmin):
+    list_display = ('id', 'product')
+    list_display_links = ('id', 'product')
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductImage, ProductImageAdmin)
@@ -48,3 +52,4 @@ admin.site.register(RAMValue, RAMValueAdmin)
 admin.site.register(RAM, RAMAdmin)
 admin.site.register(StorageValue, StorageValueAdmin)
 admin.site.register(Storage, StorageAdmin)
+admin.site.register(Popularity)

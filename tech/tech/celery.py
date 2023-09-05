@@ -15,7 +15,7 @@ app.autodiscover_tasks()
 # заносим таски в очередь
 app.conf.beat_schedule = {
     'every': { 
-        'task': 'main.tasks.repeat_order_make',
+        'task': 'main.tasks.checkFinishDate',
         'schedule': crontab(),# по умолчанию выполняет каждую минуту, очень гибко 
     },                                                              # настраивается
 

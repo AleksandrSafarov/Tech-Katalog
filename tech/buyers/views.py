@@ -218,6 +218,7 @@ def makeOrder(request):
     productInCart = list(ProductInCart.objects.filter(user=request.user, is_active=True))
     if len(productInCart) == 0:
         raise Http404
+    makePopularity(productInCart)
     totalPrice = 0
     for p in productInCart:
         if p.count <= p.product.stock:

@@ -49,7 +49,6 @@
                                 <hr class="dropdown-line">
                                 <li><a class="dropdown-item" href="{% url 'cart' %}">Корзина</a></li>
                                 <li><a class="dropdown-item" href="{% url 'favorite' 1 %}">Избранное</a></li>
-                                <li><a class="dropdown-item" href="#">История заказов</a></li>
                                 <hr class="dropdown-line">
                                 {% checkIsSeller user as isSeller %}
                                 {% if isSeller %}

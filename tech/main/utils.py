@@ -15,6 +15,8 @@ def productSort(products, sort_key, inStock=False, withDiscount=False, withRatin
         products.sort(key=lambda x: x.getPriceWithDiscount(), reverse=False)
     elif sort_key == 7:
         products.sort(key=lambda x: x.getPriceWithDiscount(), reverse=True)
+    elif sort_key == 8:
+        products.sort(key=lambda x: x.getPopularity(), reverse=True)
 
     if inStock == 'on':
         products1 = []

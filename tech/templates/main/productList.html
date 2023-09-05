@@ -26,6 +26,17 @@
             <div class="vertical" style="height: 70px;"></div>
         </li>
         <li class="rating-element">
+            <p>
+                {% if sortKey == 8 %}
+                <b style="text-decoration: underline;">сначала популярные</b>
+                {% else %}
+                <a href="{% url pathName 8 %}?{% if request.GET.inStock %}inStock=on&{% endif %}{% if request.GET.withDiscount %}withDiscount=on&{% endif %}{% if request.GET.withRating %}withRating=on&{% endif %}">сначала популярные</a>
+                {% endif %}</p>
+        </li>
+        <li class="rating-element">
+            <div class="vertical" style="height: 70px;"></div>
+        </li>
+        <li class="rating-element">
             <p>по оценке:</p>
             <p>
                 {% if sortKey == 2 %}
