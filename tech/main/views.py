@@ -247,7 +247,7 @@ def productReviewsPage(request, product_id, sort_key):
         if productRating.text or productRating.plus or productRating.minus:
             reviewsWithTextCount += 1
 
-    paginator = Paginator(reviewsWithoutUser, 1)
+    paginator = Paginator(reviewsWithoutUser, 3)
 
     page_number = request.GET.get("page")
     page_objects = paginator.get_page(page_number)
@@ -397,7 +397,7 @@ def sellerReviewsPage(request, seller_id, sort_key):
         if sellerRating.text:
             reviewsWithTextCount += 1
     
-    paginator = Paginator(reviewsWithoutUser, 1)
+    paginator = Paginator(reviewsWithoutUser, 3)
 
     page_number = request.GET.get("page")
     page_objects = paginator.get_page(page_number)

@@ -14,7 +14,7 @@ class ProductInCart(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.product + ': ' + self.user + ': ' + str(self.count)
+        return self.product.name + ': ' + self.user.username + ': ' + str(self.count)
 
     class Meta:
         verbose_name_plural = "Product in cart"
@@ -24,7 +24,7 @@ class SavedAddress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.info + self.user
+        return self.info + self.user.username
 
     class Meta:
         verbose_name_plural = "Saved addresses"
@@ -42,7 +42,7 @@ class Favorites(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.product + ': ' + self.user
+        return self.product.name + ': ' + self.user.username
 
     class Meta:
         verbose_name_plural = "Favorites"
