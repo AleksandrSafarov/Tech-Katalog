@@ -16,4 +16,4 @@ def checkFinishDate():
     for p in popularity:
         if p.finish_date.replace(tzinfo=utc) < currentDateTime:
             p.delete()
-    return "необязательная заглушка"
+    return "задача выполнена"
