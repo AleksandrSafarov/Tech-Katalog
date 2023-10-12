@@ -157,8 +157,9 @@
         {% if productInCart %}
         {% getProductInCartCount product.id user.id as productInCartCount %}
         {% if productInCartCount %}
-        <p style="font-size: x-large;"><a href="{% url 'minusProductInCart' product.id %}" class="cart-count-symbol"><b>-</b></a> | {{productInCartCount}} | 
+        <p style="font-size: x-large; margin-bottom: 0;"><a href="{% url 'minusProductInCart' product.id %}" class="cart-count-symbol"><b>-</b></a> | {{productInCartCount}} | 
           {% if product.stock > productInCartCount %}<a href="{% url 'plusProductInCart' product.id %}" class="cart-count-symbol"><b>+</b></a>{% endif %}</p>
+          <a href="{% url 'deleteProductInCart' product.id %}?pathName={{ request.resolver_match.url_name }}&id={{product.id}}" class="link-secondary" style="font-size:medium;">Удалить из корзины</a>
         {% endif %}
         {% else %}
         <a href="{% url 'addToCart' product.id %}">
